@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import UserExtend, User
-from django.contrib.auth import login, logout
+from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.http import HttpResponseRedirect
@@ -36,3 +36,25 @@ def register(request):
         except Exception as e:
             return render(request, 'registration.html', context={'message': e})
     return render(request, 'registration.html')
+
+
+def log_in(request):
+    if request.method == 'POST':
+        try:
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return HttpResponseRedirect(reverse('home'))
+            else:
+                return render(request, 'login_page.html', context={'message': 'username or password is incorrect'})
+        except Exception as e:
+            return render(request, 'login_page.html', context={'message': e})
+    return render(request, 'login_page.html')
+
+
+@login_required
+def log_out(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('home'))
