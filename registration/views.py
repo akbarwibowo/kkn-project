@@ -28,9 +28,6 @@ def register(request):
             user_extend = UserExtend(user_id=user, phone=phone, rt=rt, rw=rw, user_type=user_type)
             user_extend.save()
             login(request, user)
-            context = {
-                'message': 'you are logged in!'
-            }
 
             return HttpResponseRedirect(reverse('home'))
         except Exception as e:

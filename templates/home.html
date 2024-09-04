@@ -6,6 +6,14 @@
 </head>
 <body>
     <h1>Hello {{ request.user.username }}</h1>
-    <button><a href="{% url 'logout' %}">Logout</a></button>
+    <h1>{{ request.user.id }}</h1>
+    {% if request.user.is_authenticated %}
+        <button><a href="{% url 'logout' %}">Logout</a></button>
+        <button><a href="{% url 'add_info_page' request.user.id%}">Add Info</a></button>
+        {{ message }}
+    {% else %}
+        <button><a href="{% url 'login' %}">Login</a></button>
+        <button><a href="{% url 'register' %}">Register</a></button>
+    {% endif %}
 </body>
 </html>

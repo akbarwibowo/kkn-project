@@ -22,4 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('registration.urls')),
     path('', views.home, name='home'),
+    path('info_desa/', include('info_desa.urls')),
 ]

@@ -11,7 +11,7 @@ class UserExtend(models.Model):
         "user": "user",
         "visitor": "visitor"
     }
-    user_id = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone = models.CharField(max_length=12, blank=True)
     rt = models.IntegerField()
     rw = models.IntegerField()
