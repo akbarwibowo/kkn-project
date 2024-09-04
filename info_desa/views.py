@@ -13,12 +13,11 @@ def home(request):
 
 
 def add_info_form(request, user_id):
-    user_type = UserExtend.objects.filter(user_id=user_id).values('user_type').first()['user_type']
-
-    if user_type == 'user':
+    user = request.user.username
+    if user == 'AnonymousUser':
         return render(request, 'home.html', context={'message': 'You are not allowed to access this page'})
 
-    return render(request, 'add_info_form.html', context={'user_id': user_id})
+    return render(request, 'add_info_form.html')
 
 
 def add_info(request, user_id):
