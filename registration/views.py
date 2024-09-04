@@ -25,7 +25,13 @@ def register(request):
                 user_type = user_choices['special_user']
 
             user = User.objects.create_user(username=username, password=password, email=email)
-            user_extend = UserExtend(user_id=user, phone=phone, rt=rt, rw=rw, user_type=user_type)
+            user_extend = UserExtend(
+                user=user,
+                phone=phone,
+                rt=rt,
+                rw=rw,
+                user_type=user_type
+            )
             user_extend.save()
             login(request, user)
 

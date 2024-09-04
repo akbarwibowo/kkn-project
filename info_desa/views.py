@@ -12,7 +12,7 @@ def home(request):
     return render(request, 'home.html')
 
 
-def add_info_form(request, user_id):
+def add_info_form(request):
     user = request.user.username
     if user == 'AnonymousUser':
         return render(request, 'home.html', context={'message': 'You are not allowed to access this page'})
