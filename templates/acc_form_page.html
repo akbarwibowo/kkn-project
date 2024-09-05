@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ACC Information</title>
+</head>
+<body>
+    <ul>
+        {% for info in informations %}
+            <li>{{ info.info_name }}</li>
+            <li>{{ info.info_description }}</li>
+            {% if info.info_image %}
+                    <img src="data:image/jpeg;base64,{{ info.info_image|safe }}" alt="image">
+                {% endif %}
+            <li>{{ info.info_created_date }}</li>
+            <li>maker: {{ info.info_maker }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

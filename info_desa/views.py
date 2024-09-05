@@ -5,8 +5,6 @@ from django.urls import reverse
 from .models import Information
 from datetime import date
 import base64
-from PIL import Image
-import io
 
 # Create your views here.
 
@@ -18,9 +16,14 @@ def home(request):
     if informations is None or len(informations) == 0:
         message = "There is no information available"
         return render(request, 'home.html', context={'message': message})
+    user_id = request.user.id
+    user_type = UserExtend.objects.get(user_id=user_id).user_type
+
     context = {
         'informations': informations,
+        'user_type': user_type
     }
+
     return render(request, 'home.html', context=context)
 
 
@@ -58,4 +61,22 @@ def add_info(request, user_id):
 def info_acc_form(request, user_id):
     user_type = UserExtend.objects.get(user_id=user_id).user_type
     if user_type != 'super_user':
-        return render(request, 'home.html', context={'message': 'You are not allowed to access this page'})
+        return render(request, 'home.html', context={'acc_message': 'You are not allowed to access this page'})
+
+    informations = Information.objects.filter(approved=False).values()
+
+    for info in informations:
+        info['info_image'] = base64.b64encode(info['info_image']).decode('utf-8')
+        info_maker = Information.objects.get(id=info['id']).user.user.username
+        info['info_maker'] = info_maker
+
+    if informations is None or len(informations) == 0:
+        message = "There is no information need to accept"
+        return render(request, 'acc_form_page.html', context={'message': message})
+
+    context = {
+        'informations': informations,
+        'user_id': user_id
+    }
+
+    return render(request, 'acc_form_page.html', context=context)
