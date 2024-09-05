@@ -80,3 +80,11 @@ def info_acc_form(request, user_id):
     }
 
     return render(request, 'acc_form_page.html', context=context)
+
+
+def info_acc(request, info_id, user_id):
+    info = Information.objects.get(id=info_id)
+    info.approved = True
+    info.save()
+
+    return HttpResponseRedirect(reverse('acc_form', args=(user_id,)))

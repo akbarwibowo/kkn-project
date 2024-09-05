@@ -13,7 +13,10 @@
                     <img src="data:image/jpeg;base64,{{ info.info_image|safe }}" alt="image">
                 {% endif %}
             <li>{{ info.info_created_date }}</li>
-            <li>maker: {{ info.info_maker }}</li>
+            <li>
+                maker: {{ info.info_maker }}
+                <button><a href="{% url 'acc_info' info.id request.user.id %}">Accept</a> </button>
+            </li>
         {% endfor %}
     </ul>
 </body>
