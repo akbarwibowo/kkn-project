@@ -5,6 +5,7 @@
     <title>Login</title>
 </head>
 <body>
+    {{ message }}
     <form action="{% url 'login' %}" method="POST">
         {% csrf_token %}
         <label for="username">Username:</label>

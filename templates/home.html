@@ -6,12 +6,11 @@
 </head>
 <body>
     <h1>Hello {{ request.user.username }}</h1>
-    <h1>{{ user_type }}</h1>
     <h2>{{ message }}</h2>
     <ul>
         {% for info in informations %}
-            <li>{{ info.info_name }}</li>
-            <li>{{ info.info_description }}</li>
+            <li>name: {{ info.info_name }}</li>
+            <li>description: {{ info.info_description }}</li>
             {% if info.info_image %}
                     <img src="data:image/jpeg;base64,{{ info.info_image|safe }}" alt="image">
                 {% endif %}
@@ -22,8 +21,11 @@
     {% if request.user.is_authenticated %}
         <button><a href="{% url 'logout' %}">Logout</a></button>
         <button><a href="{% url 'add_info_page' %}">Add Info</a></button>
-        <button><a href="{% url 'acc_form' request.user.id %}">ACC form</a> </button>
+        {% if user_type == 'super_user' %}
+            <button><a href="{% url 'acc_form' request.user.id %}">ACC form</a> </button>
+        {% endif %}
         {{ message }}
+        <h1>user type: {{ user_type }}</h1>
     {% else %}
         <button><a href="{% url 'login' %}">Login</a></button>
         <button><a href="{% url 'register' %}">Register</a></button>

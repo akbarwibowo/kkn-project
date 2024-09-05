@@ -9,26 +9,55 @@ import base64
 # Create your views here.
 
 
+# def home(request):
+#     informations = Information.objects.filter(approved=True).order_by('-info_created_date').values()
+#     for info in informations:
+#         info['info_image'] = base64.b64encode(info['info_image']).decode('utf-8')
+#     message = ''
+#     if request.user.is_authenticated:
+#         if informations is None or len(informations) == 0:
+#             message = "There is no information available"
+#         user_id = request.user.id
+#         user_type = UserExtend.objects.get(user_id=user_id).user_type
+#         context = {
+#             'informations': informations,
+#             'user_type': user_type,
+#             'message': message,
+#         }
+#
+#         return render(request, 'home.html', context=context)
+#     else:
+#         if informations is None or len(informations) == 0:
+#             message = "There is no information available"
+#         context = {
+#             'informations': informations,
+#             'message': message,
+#         }
+#         return render(request, 'home.html', context=context)
+
+
 def home(request):
     informations = Information.objects.filter(approved=True).order_by('-info_created_date').values()
     for info in informations:
         info['info_image'] = base64.b64encode(info['info_image']).decode('utf-8')
-    if informations is None or len(informations) == 0:
-        message = "There is no information available"
-        return render(request, 'home.html', context={'message': message})
-    user_id = request.user.id
-    user_type = UserExtend.objects.get(user_id=user_id).user_type
 
+    message = "There is no information available" if not informations else ""
     context = {
         'informations': informations,
-        'user_type': user_type
+        'message': message,
     }
+
+    if request.user.is_authenticated:
+        user_id = request.user.id
+        user_type = UserExtend.objects.get(user_id=user_id).user_type
+        context['user_type'] = user_type
 
     return render(request, 'home.html', context=context)
 
 
 def add_info_form(request):
     user = request.user.username
+    # TODO: try to use http redirect instead
     if user == 'AnonymousUser':
         return render(request, 'home.html', context={'message': 'You are not allowed to access this page'})
 
@@ -61,7 +90,7 @@ def add_info(request, user_id):
 def info_acc_form(request, user_id):
     user_type = UserExtend.objects.get(user_id=user_id).user_type
     if user_type != 'super_user':
-        return render(request, 'home.html', context={'acc_message': 'You are not allowed to access this page'})
+        return redirect(reverse('home'))
 
     informations = Information.objects.filter(approved=False).values()
 
