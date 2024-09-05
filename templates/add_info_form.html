@@ -6,7 +6,7 @@
 </head>
 <body>
     {{ message }}
-    <form action="{% url 'add_info' request.user.id %}" method="post">
+    <form action="{% url 'add_info' request.user.id %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <label for="info_name">Name:</label>
         <input type="text" name="info_name" id="info_name">

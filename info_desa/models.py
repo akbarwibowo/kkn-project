@@ -8,7 +8,7 @@ class Information(models.Model):
     info_name = models.CharField(max_length=100)
     info_description = models.TextField()
     info_created_date = models.DateField()
-    info_image = models.ImageField()
+    info_image = models.BinaryField()
     edited = models.BooleanField(default=False)
     approved = models.BooleanField(default=False)
     revision = models.BooleanField(default=False)
