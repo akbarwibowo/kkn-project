@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Revision Form</title>
+</head>
+<body>
+    <form action="{% url 'revision_info_do' informations.id %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="info_name">Name:</label>
+        <input type="text" name="info_name" id="info_name" value={{ informations.info_name }}>
+        <label for="info_description">Description:</label>
+        <textarea name="info_description" id="info_description">{{ informations.info_description }}</textarea>
+        <label for="info_image">Image:</label>
+        <input type="file" name="info_image" id="info_image" accept="image/*">
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

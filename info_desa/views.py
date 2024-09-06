@@ -115,6 +115,7 @@ def info_reject(request, info_id, user_id):
 def info_revise(request, info_id, user_id):
     info = Information.objects.get(id=info_id)
     info.revision = True
+    info.info_image = None
     info.save()
 
     revision_message = InformationMessage(
@@ -142,3 +143,30 @@ def info_feedback(request, user_id):
     }
 
     return render(request, 'feedback_info.html', context=context)
+
+
+def info_revision_form(request, info_id):
+    informations = Information.objects.get(id=info_id)
+    context = {
+        'informations': informations,
+    }
+
+    return render(request, 'info_revision_form.html', context=context)
+
+
+@require_POST
+def info_do_revision(request, info_id):
+    info = Information.objects.get(id=info_id)
+    info.info_name = request.POST.get('info_name')
+    info.info_description = request.POST.get('info_description')
+    info_image_data = request.FILES.get('info_image')
+    info.info_image = info_image_data.read()
+    info.info_date = date.today()
+    info.revision = False
+
+    info.save()
+
+    info_message = InformationMessage.objects.get(information=info_id)
+    info_message.delete()
+
+    return HttpResponseRedirect(reverse('home'))

@@ -11,6 +11,9 @@
             info name: {{ info.info_name }}
             info message: {{ info.info_message }}
             status: {{ info.status }}
+            {% if info.status == 'revision' %}
+                <button><a href="{% url 'revision' info.id %}">Revision</a></button>
+            {% endif %}
         </li>
     {% endfor %}
     <button><a href="{% url 'home' %}">Home</a></button>
