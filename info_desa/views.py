@@ -134,7 +134,7 @@ def info_feedback(request, user_id):
     if informations:
         for info in informations:
             info_messages = InformationMessage.objects.get(information=info['id'])
-            info['info_message'] = info_messages
+            info['info_message'] = info_messages.message
             info['status'] = info_messages.type
     else:
         return render(request, 'feedback_info.html', context={'message': 'There is no information available'})
@@ -170,3 +170,13 @@ def info_do_revision(request, info_id):
     info_message.delete()
 
     return HttpResponseRedirect(reverse('home'))
+
+
+def info_delete(request, info_id):
+    info_message = InformationMessage.objects.get(information=info_id)
+    info_message.delete()
+
+    info = Information.objects.get(id=info_id)
+    info.delete()
+
+    return HttpResponseRedirect(reverse('feedback_info', args=(request.user.id,)))

@@ -13,6 +13,10 @@
             status: {{ info.status }}
             {% if info.status == 'revision' %}
                 <button><a href="{% url 'revision' info.id %}">Revision</a></button>
+                <button><a href="{% url 'delete_info' info.id %}">Delete</a></button>
+            
+            {% else %}
+                <button><a href="{% url 'delete_info' info.id %}">Delete</a></button>
             {% endif %}
         </li>
     {% endfor %}

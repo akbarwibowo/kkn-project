@@ -8,8 +8,9 @@ urlpatterns = [
     path('acc_info/<int:info_id>/<int:user_id>/', views.info_acc, name='acc_info'),
     path('reject_info/<int:info_id>/<int:user_id>/', views.info_reject, name='reject_info'),
     path('revise_info/<int:info_id>/<int:user_id>/', views.info_revise, name='revise_info'),
-    path('rejected_info/<int:user_id>/', views.info_feedback, name='rejected_info'),
+    path('feedback_info/<int:user_id>/', views.info_feedback, name='feedback_info'),
     path('revision/<int:info_id>/', views.info_revision_form, name='revision'),
     path('revision_info_do/<int:info_id>/', views.info_do_revision, name='revision_info_do'),
+    path('delete_info/<int:info_id>/', views.info_delete, name='delete_info'),
 ]
 
