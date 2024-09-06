@@ -19,14 +19,14 @@
                 <form action="{% url 'reject_info' info.id request.user.id %}" method="post">
                     {% csrf_token %}
                     <label for="reject_message">Message of Rejection</label>
-                    <input type="text" name="reject_message" id="reject_message" placeholder="Message of Rejection">
+                    <input type="text" name="reject_message" id="reject_message" placeholder="Message of Rejection" required>
                     <button type="submit">Reject</button>
                 </form>
             
                 <form action="{% url 'revise_info' info.id request.user.id %}" method="post">
                     {% csrf_token %}
                     <label for="revision_message">Message of Revision</label>
-                    <input type="text" name="revision_message" id="revision_message" placeholder="Message of Revision">
+                    <input type="text" name="revision_message" id="revision_message" placeholder="Message of Revision" required>
                     <button type="submit">Revise</button>
                 </form>
             </li>

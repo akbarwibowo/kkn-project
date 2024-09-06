@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rejected Informations</title>
+</head>
+<body>
+    {{ message }}
+    {% for info in informations %}
+        <li>
+            info name: {{ info.info_name }}
+            info message: {{ info.info_message }}
+            status: {{ info.status }}
+        </li>
+    {% endfor %}
+    <button><a href="{% url 'home' %}">Home</a></button>
+</body>
+</html>

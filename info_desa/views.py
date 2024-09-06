@@ -125,3 +125,20 @@ def info_revise(request, info_id, user_id):
     revision_message.save()
 
     return HttpResponseRedirect(reverse('acc_form', args=(user_id,)))
+
+
+def info_feedback(request, user_id):
+    informations = (Information.objects.filter(user=user_id, rejected=True).values() |
+                    Information.objects.filter(user=user_id, revision=True).values()).order_by('-info_created_date')
+    if informations:
+        for info in informations:
+            info_messages = InformationMessage.objects.get(information=info['id'])
+            info['info_message'] = info_messages
+            info['status'] = info_messages.type
+    else:
+        return render(request, 'feedback_info.html', context={'message': 'There is no information available'})
+    context = {
+        'informations': informations,
+    }
+
+    return render(request, 'feedback_info.html', context=context)

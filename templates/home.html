@@ -24,6 +24,7 @@
         {% if user_type == 'super_user' %}
             <button><a href="{% url 'acc_form' request.user.id %}">ACC form</a> </button>
         {% endif %}
+        <button><a href="{% url 'rejected_info' request.user.id %}">Info Feedback</a> </button>
         {{ message }}
         <h1>user type: {{ user_type }}</h1>
     {% else %}
