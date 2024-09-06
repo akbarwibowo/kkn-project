@@ -1,39 +1,14 @@
 from django.shortcuts import render, redirect
+from django.views.decorators.http import require_POST
+
 from registration.models import UserExtend
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from .models import Information
+from .models import Information, InformationMessage
 from datetime import date
 import base64
 
 # Create your views here.
-
-
-# def home(request):
-#     informations = Information.objects.filter(approved=True).order_by('-info_created_date').values()
-#     for info in informations:
-#         info['info_image'] = base64.b64encode(info['info_image']).decode('utf-8')
-#     message = ''
-#     if request.user.is_authenticated:
-#         if informations is None or len(informations) == 0:
-#             message = "There is no information available"
-#         user_id = request.user.id
-#         user_type = UserExtend.objects.get(user_id=user_id).user_type
-#         context = {
-#             'informations': informations,
-#             'user_type': user_type,
-#             'message': message,
-#         }
-#
-#         return render(request, 'home.html', context=context)
-#     else:
-#         if informations is None or len(informations) == 0:
-#             message = "There is no information available"
-#         context = {
-#             'informations': informations,
-#             'message': message,
-#         }
-#         return render(request, 'home.html', context=context)
 
 
 def home(request):
@@ -92,7 +67,7 @@ def info_acc_form(request, user_id):
     if user_type != 'super_user':
         return redirect(reverse('home'))
 
-    informations = Information.objects.filter(approved=False).values()
+    informations = Information.objects.filter(approved=False, revision=False, rejected=False).values()
 
     for info in informations:
         info['info_image'] = base64.b64encode(info['info_image']).decode('utf-8')
@@ -115,5 +90,38 @@ def info_acc(request, info_id, user_id):
     info = Information.objects.get(id=info_id)
     info.approved = True
     info.save()
+
+    return HttpResponseRedirect(reverse('acc_form', args=(user_id,)))
+
+
+@require_POST
+def info_reject(request, info_id, user_id):
+    info = Information.objects.get(id=info_id)
+    info.info_image = None
+    info.rejected = True
+    info.save()
+
+    reject_message = InformationMessage(
+        type='rejected',
+        message=request.POST.get('reject_message'),
+        information=info
+    )
+    reject_message.save()
+
+    return HttpResponseRedirect(reverse('acc_form', args=(user_id,)))
+
+
+@require_POST
+def info_revise(request, info_id, user_id):
+    info = Information.objects.get(id=info_id)
+    info.revision = True
+    info.save()
+
+    revision_message = InformationMessage(
+        type='revision',
+        message=request.POST.get('revision_message'),
+        information=info
+    )
+    revision_message.save()
 
     return HttpResponseRedirect(reverse('acc_form', args=(user_id,)))

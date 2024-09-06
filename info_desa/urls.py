@@ -6,5 +6,7 @@ urlpatterns = [
     path('add_info/<int:user_id>/', views.add_info, name='add_info'),
     path('acc_form/<int:user_id>/', views.info_acc_form, name='acc_form'),
     path('acc_info/<int:info_id>/<int:user_id>/', views.info_acc, name='acc_info'),
+    path('reject_info/<int:info_id>/<int:user_id>/', views.info_reject, name='reject_info'),
+    path('revise_info/<int:info_id>/<int:user_id>/', views.info_revise, name='revise_info'),
 ]
 
