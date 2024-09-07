@@ -154,8 +154,10 @@ def info_feedback(request, user_id):
 
 def info_revision_form(request, info_id):
     informations = Information.objects.get(id=info_id)
+    info_messages = InformationMessage.objects.get(information=informations)
     context = {
         'informations': informations,
+        'info_message': info_messages.message,
     }
 
     return render(request, 'info_desa/info_revision_form.html', context=context)

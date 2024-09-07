@@ -148,8 +148,10 @@ def event_feedback(request, user_id):
 
 def event_revision_form(request, event_id):
     event = Event.objects.get(id=event_id)
+    event_message = EventMessage.objects.get(event=event)
     context = {
-        'event': event
+        'event': event,
+        'event_message': event_message.message,
     }
 
     return render(request, 'event_desa/event_revision_form.html', context=context)

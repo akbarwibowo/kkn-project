@@ -5,6 +5,8 @@
     <title>Event Revision Form</title>
 </head>
 <body>
+    <h1>Event Revision Form</h1>
+    <p>{{ event_message }}</p>
     <form action="{% url 'event_do_revision' event.id %}" method="post">
         {% csrf_token %}
         <label for="event_name">Name:</label>

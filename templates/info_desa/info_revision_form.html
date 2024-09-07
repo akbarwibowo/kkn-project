@@ -5,6 +5,8 @@
     <title>Revision Form</title>
 </head>
 <body>
+    <h1>Revision Form</h1>
+    <p>{{ info_message }}</p>
     <form action="{% url 'revision_info_do' informations.id %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <label for="info_name">Name:</label>
