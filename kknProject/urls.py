@@ -23,4 +23,5 @@ urlpatterns = [
     path('auth/', include('registration.urls')),
     path('', views.home, name='home'),
     path('info_desa/', include('info_desa.urls')),
+    path('event_desa/', include('event_desa.urls')),
 ]

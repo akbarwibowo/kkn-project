@@ -32,11 +32,10 @@ def home(request):
 
 def add_info_form(request):
     user = request.user.username
-    # TODO: try to use http redirect instead
     if user == 'AnonymousUser':
         return render(request, 'home.html', context={'message': 'You are not allowed to access this page'})
 
-    return render(request, 'add_info_form.html')
+    return render(request, 'info_desa/add_info_form.html')
 
 
 def add_info(request, user_id):
@@ -58,8 +57,8 @@ def add_info(request, user_id):
 
             return redirect('home')
         except Exception as e:
-            return render(request, 'add_info_form.html', context={'message': e})
-    return render(request, 'add_info_form.html')
+            return render(request, 'info_desa/add_info_form.html', context={'message': e})
+    return render(request, 'info_desa/add_info_form.html')
 
 
 def info_acc_form(request, user_id):
@@ -76,14 +75,14 @@ def info_acc_form(request, user_id):
 
     if informations is None or len(informations) == 0:
         message = "There is no information need to accept"
-        return render(request, 'acc_form_page.html', context={'message': message})
+        return render(request, 'info_desa/acc_form_page.html', context={'message': message})
 
     context = {
         'informations': informations,
         'user_id': user_id
     }
 
-    return render(request, 'acc_form_page.html', context=context)
+    return render(request, 'info_desa/acc_form_page.html', context=context)
 
 
 def info_acc(request, info_id, user_id):
@@ -130,19 +129,25 @@ def info_revise(request, info_id, user_id):
 
 def info_feedback(request, user_id):
     informations = (Information.objects.filter(user=user_id, rejected=True).values() |
-                    Information.objects.filter(user=user_id, revision=True).values()).order_by('-info_created_date')
+                    Information.objects.filter(user=user_id, revision=True).values() |
+                    Information.objects.filter(user=user_id, approved=True).values()).order_by('-info_created_date')
     if informations:
         for info in informations:
-            info_messages = InformationMessage.objects.get(information=info['id'])
-            info['info_message'] = info_messages.message
-            info['status'] = info_messages.type
+            if info['rejected'] or info['revision']:
+                info_messages = InformationMessage.objects.get(information=info['id'])
+                info['info_message'] = info_messages.message
+                info['status'] = info_messages.type
+            else:
+                info['info_message'] = 'Published'
+                info['status'] = 'Approved'
+
     else:
-        return render(request, 'feedback_info.html', context={'message': 'There is no information available'})
+        return render(request, 'info_desa/feedback_info.html', context={'message': 'There is no information available'})
     context = {
         'informations': informations,
     }
 
-    return render(request, 'feedback_info.html', context=context)
+    return render(request, 'info_desa/feedback_info.html', context=context)
 
 
 def info_revision_form(request, info_id):
@@ -151,7 +156,7 @@ def info_revision_form(request, info_id):
         'informations': informations,
     }
 
-    return render(request, 'info_revision_form.html', context=context)
+    return render(request, 'info_desa/info_revision_form.html', context=context)
 
 
 @require_POST
@@ -173,10 +178,13 @@ def info_do_revision(request, info_id):
 
 
 def info_delete(request, info_id):
-    info_message = InformationMessage.objects.get(information=info_id)
-    info_message.delete()
-
+    try:
+        info_message = InformationMessage.objects.get(information=info_id)
+        info_message.delete()
+    except Exception as e:
+        pass
     info = Information.objects.get(id=info_id)
-    info.delete()
+    if info:
+        info.delete()
 
     return HttpResponseRedirect(reverse('feedback_info', args=(request.user.id,)))

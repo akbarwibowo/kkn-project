@@ -18,7 +18,7 @@ def register(request):
             password = request.POST.get('password')
             auth = authenticate(request, username=username, password=password)
             if auth is not None:
-                return render(request, 'registration.html', context={'message': 'username already exists'})
+                return render(request, 'authentication/registration.html', context={'message': 'username already exists'})
             phone = request.POST.get('phone')
             rt = request.POST.get('rt')
             rw = request.POST.get('rw')
@@ -42,8 +42,8 @@ def register(request):
 
             return redirect((reverse('home')))
         except Exception as e:
-            return render(request, 'registration.html', context={'message': e})
-    return render(request, 'registration.html')
+            return render(request, 'authentication/registration.html', context={'message': e})
+    return render(request, 'authentication/registration.html')
 
 
 def log_in(request):
@@ -57,18 +57,18 @@ def log_in(request):
 
             # Check if the user exists
             if not User.objects.filter(username=username).exists():
-                return render(request, 'login_page.html', context={'message': 'User does not exist'})
+                return render(request, 'authentication/login_page.html', context={'message': 'User does not exist'})
 
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
                 return redirect(reverse('home'))
             else:
-                return render(request, 'login_page.html', context={'message': 'Username or password is incorrect'})
+                return render(request, 'authentication/login_page.html', context={'message': 'Username or password is incorrect'})
         except Exception as e:
-            return render(request, 'login_page.html', context={'message': e})
+            return render(request, 'authentication/login_page.html', context={'message': e})
 
-    return render(request, 'login_page.html')
+    return render(request, 'authentication/login_page.html')
 
 
 @login_required
