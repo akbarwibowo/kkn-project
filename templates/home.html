@@ -25,6 +25,7 @@
             <button><a href="{% url 'acc_form' request.user.id %}">ACC form</a> </button>
         {% endif %}
         <button><a href="{% url 'feedback_info' request.user.id %}">Info Feedback</a> </button>
+        <button><a href="{% url 'event_page' request.user.id %}">Events</a></button>
         {{ message }}
         <h1>user type: {{ user_type }}</h1>
     {% else %}

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Event Revision Form</title>
+</head>
+<body>
+    <form action="{% url 'event_do_revision' event.id %}" method="post">
+        {% csrf_token %}
+        <label for="event_name">Name:</label>
+        <input type="text" name="event_name" id="event_name" value={{ event.event_name }}>
+        <label for="event_description">Description:</label>
+        <textarea name="event_description" id="event_description">{{ event.event_description }}</textarea>
+        <label for="event_date">Date:</label>
+        <input type="date" name="event_date" id="event_date" value={{ event.event_date }}>
+        <label for="event_time">Time:</label>
+        <input type="time" name="event_time" id="event_time">
+        <label for="event_location">Location:</label>
+        <input type="text" name="event_location" id="event_location" value={{ event.event_location }}>
+        <label for="event_target">Target:</label>
+        <input type="text" name="event_target" id="event_target" value={{ event.event_target }}>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

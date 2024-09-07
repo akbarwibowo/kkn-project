@@ -68,10 +68,11 @@ def info_acc_form(request, user_id):
 
     informations = Information.objects.filter(approved=False, revision=False, rejected=False).values()
 
-    for info in informations:
-        info['info_image'] = base64.b64encode(info['info_image']).decode('utf-8')
-        info_maker = Information.objects.get(id=info['id']).user.user.username
-        info['info_maker'] = info_maker
+    if informations:
+        for info in informations:
+            info['info_image'] = base64.b64encode(info['info_image']).decode('utf-8')
+            info_maker = Information.objects.get(id=info['id']).user.user.username
+            info['info_maker'] = info_maker
 
     if informations is None or len(informations) == 0:
         message = "There is no information need to accept"
@@ -128,15 +129,16 @@ def info_revise(request, info_id, user_id):
 
 
 def info_feedback(request, user_id):
-    informations = (Information.objects.filter(user=user_id, rejected=True).values() |
-                    Information.objects.filter(user=user_id, revision=True).values() |
-                    Information.objects.filter(user=user_id, approved=True).values()).order_by('-info_created_date')
+    informations = Information.objects.filter(user=user_id).values().order_by('-info_created_date')
     if informations:
         for info in informations:
             if info['rejected'] or info['revision']:
                 info_messages = InformationMessage.objects.get(information=info['id'])
                 info['info_message'] = info_messages.message
                 info['status'] = info_messages.type
+            elif not info['approved']:
+                info['info_message'] = 'Waiting for approval'
+                info['status'] = 'Pending'
             else:
                 info['info_message'] = 'Published'
                 info['status'] = 'Approved'

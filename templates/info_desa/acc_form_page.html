@@ -10,8 +10,8 @@
             <li>{{ info.info_name }}</li>
             <li>{{ info.info_description }}</li>
             {% if info.info_image %}
-                    <img src="data:image/jpeg;base64,{{ info.info_image|safe }}" alt="image">
-                {% endif %}
+                <img src="data:image/jpeg;base64,{{ info.info_image|safe }}" alt="image">
+            {% endif %}
             <li>{{ info.info_created_date }}</li>
             <li>
                 maker: {{ info.info_maker }}

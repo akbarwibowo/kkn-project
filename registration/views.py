@@ -40,7 +40,7 @@ def register(request):
             user_extend.save()
             login(request, user)
 
-            return redirect((reverse('home')))
+            return redirect((reverse('event_page', args=(request.user.id,))))
         except Exception as e:
             return render(request, 'authentication/registration.html', context={'message': e})
     return render(request, 'authentication/registration.html')
@@ -62,7 +62,7 @@ def log_in(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect(reverse('home'))
+                return redirect(reverse('event_page', args=(request.user.id,)))
             else:
                 return render(request, 'authentication/login_page.html', context={'message': 'Username or password is incorrect'})
         except Exception as e:

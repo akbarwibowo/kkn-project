@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Events</title>
+</head>
+<body>
+    <h1>Welcome to the event page</h1>
+    {{ message }}
+    {% for event in events %}
+        <li>
+            event name: {{ event.event_name }}
+            event description: {{ event.event_description }}
+            event date: {{ event.event_date }}
+            event time: {{ event.event_time }}
+            event location: {{ event.event_location }}
+            event target: {{ event.event_target }}
+        </li>
+    {% endfor %}
+
+    {% if request.user.is_authenticated %}
+        <button><a href="{% url 'logout' %}">Logout</a></button>
+        <button><a href="{% url 'add_event_form' %}">Add Event</a></button>
+        {% if user_type == 'super_user' %}
+            <button><a href="{% url 'event_acc_form' request.user.id %}">ACC form</a> </button>
+        {% endif %}
+        <button><a href="{% url 'event_feedback' request.user.id %}">Info Feedback</a> </button>
+        <button><a href="{% url 'home' %}">Home</a></button>
+        {{ message }}
+        <h1>user type: {{ user_type }}</h1>
+    {% else %}
+        <button><a href="{% url 'login' %}">Login</a></button>
+        <button><a href="{% url 'register' %}">Register</a></button>
+    {% endif %}
+
+</body>
+</html>

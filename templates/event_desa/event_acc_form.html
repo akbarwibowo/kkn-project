@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ACC Event</title>
+</head>
+<body>
+    <h1>ACC Event</h1>
+    <p>{{ message }}</p>
+    <ul>
+        {% for event in events %}
+            <li>
+                event name: {{ event.event_name }}
+                event description: {{ event.event_description }}
+                event date: {{ event.event_date }}
+                event time: {{ event.event_time }}
+                event location: {{ event.event_location }}
+                event target: {{ event.event_target }}
+                event maker: {{ event.event_maker }}
+                <button><a href="{% url 'event_accept' event.id request.user.id %}">ACC</a></button>
+                <form action="{% url 'event_reject' event.id request.user.id %}" method="post">
+                    {% csrf_token %}
+                    <label for="reject_message">Message of rejection</label>
+                    <input type="text" id="reject_message" name="reject_message">
+                    <button type="submit">Reject</button>
+                </form>
+                <form action="{% url 'event_revision' event.id request.user.id %}" method="post">
+                    {% csrf_token %}
+                    <label for="revision_message">Message of revision</label>
+                    <input type="text" id="revision_message" name="revision_message">
+                    <button type="submit">Revision</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <button><a href="{% url 'event_page' request.user.id %}">Home</a></button>
+</body>
+</html>
