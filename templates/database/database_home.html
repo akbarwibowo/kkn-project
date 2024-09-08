@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Data Desa</title>
+</head>
+<body>
+    {{ message }}
+    <table>
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Name</th>
+                <th>Gender</th>
+                <th>Age</th>
+                <th>RT</th>
+                <th>RW</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in database %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ data.name }}</td>
+                <td>{{ data.gender }}</td>
+                <td>{{ data.age }}</td>
+                <td>{{ data.rt }}</td>
+                <td>{{ data.rw }}</td>
+            {% endfor %}
+        </tbody>
+    </table>
+    <button><a href="{% url 'event_page' request.user.id %}">Event Page</a></button>
+</body>
+</html>

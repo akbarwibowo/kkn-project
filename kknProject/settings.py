@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'registration',
     'info_desa',
-    "event_desa.apps.EventDesaConfig"
+    "event_desa.apps.EventDesaConfig",
+    "database.apps.DatabaseConfig"
 ]
 
 MIDDLEWARE = [

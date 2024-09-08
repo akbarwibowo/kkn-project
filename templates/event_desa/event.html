@@ -26,6 +26,7 @@
         {% endif %}
         <button><a href="{% url 'event_feedback' request.user.id %}">Info Feedback</a> </button>
         <button><a href="{% url 'home' %}">Home</a></button>
+        <button><a href="{% url 'database_home' %}">Database</a></button>
         {{ message }}
         <h1>user type: {{ user_type }}</h1>
     {% else %}

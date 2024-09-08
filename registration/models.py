@@ -13,6 +13,6 @@ class UserExtend(models.Model):
     }
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone = models.CharField(max_length=12, blank=True)
-    rt = models.IntegerField()
-    rw = models.IntegerField()
+    rt = models.SmallIntegerField()
+    rw = models.SmallIntegerField()
     user_type = models.CharField(max_length=20, choices=user_type_choices, default=user_type_choices['user'])
