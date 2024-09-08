@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .form-container {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .form-group {
+            margin-bottom: 10px;
+        }
+        label {
+            display: inline-block;
+            width: 100px;
+        }
+        input, select {
+            width: 200px;
+        }
+        button {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Dynamic Form</h1>
+    <form id="mainForm" method="POST">
+        {% csrf_token %}
+        <div id="formsContainer"></div>
+        <button type="button" onclick="addForm()">Add New Form</button>
+        <button type="submit">Submit All Forms</button>
+    </form>
+
+    <script>
+        let formCount = 0;
+
+        function addForm() {
+            formCount++;
+            const formContainer = document.createElement('div');
+            formContainer.className = 'form-container';
+            formContainer.id = `form-${formCount}`;
+
+            formContainer.innerHTML = `
+                <h2>Form ${formCount}</h2>
+                <div class="form-group">
+                    <label for="name-${formCount}">Name:</label>
+                    <input type="text" id="name-${formCount}" name="name-${formCount}" required>
+                </div>
+                <div class="form-group">
+                    <label for="gender-${formCount}">Gender:</label>
+                    <select id="gender-${formCount}" name="gender-${formCount}" required onchange="togglePregnantField(${formCount})">
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </div>
+                <div class="form-group" id="pregnant-group-${formCount}" style="display: none;">
+                    <label for="pregnant-${formCount}">Pregnant:</label>
+                    <select id="pregnant-${formCount}" name="pregnant-${formCount}">
+                        <option value="false">False</option>
+                        <option value="true">True</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="birthdate-${formCount}">Birth Date:</label>
+                    <input type="date" id="birthdate-${formCount}" name="birthdate-${formCount}" required>
+                </div>
+                <div class="form-group">
+                    <label for="work-${formCount}">Work:</label>
+                    <select id="work-${formCount}" name="work-${formCount}">
+                        <option value="student">Student</option>
+                        <option value="employee">Employee</option>
+                        <option value="unemployed">Unemployed</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="rt-${formCount}">RT:</label>
+                    <input type="number" id="rt-${formCount}" name="rt-${formCount}" required>
+                </div>
+                <div class="form-group">
+                    <label for="rw-${formCount}">RW:</label>
+                    <input type="number" id="rw-${formCount}" name="rw-${formCount}" required>
+                </div>
+                ${formCount > 1 ? `<button type="button" onclick="deleteForm(${formCount})">Delete Form</button>` : ''}
+            `;
+
+            document.getElementById('formsContainer').appendChild(formContainer);
+        }
+
+        function deleteForm(formId) {
+            const formToDelete = document.getElementById(`form-${formId}`);
+            formToDelete.remove();
+        }
+
+        function togglePregnantField(formId) {
+            const genderSelect = document.getElementById(`gender-${formId}`);
+            const pregnantGroup = document.getElementById(`pregnant-group-${formId}`);
+            
+            if (genderSelect.value === 'female') {
+                pregnantGroup.style.display = 'block';
+            } else {
+                pregnantGroup.style.display = 'none';
+                document.getElementById(`pregnant-${formId}`).value = 'false';
+            }
+        }
+
+        document.getElementById('mainForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formList = [];
+
+            for (let i = 1; i <= formCount; i++) {
+                if (document.getElementById(`form-${i}`)) {
+                    const formEntry = {
+                        name: document.getElementById(`name-${i}`).value,
+                        gender: document.getElementById(`gender-${i}`).value,
+                        birthdate: document.getElementById(`birthdate-${i}`).value,
+                        rt: document.getElementById(`rt-${i}`).value,
+                        rw: document.getElementById(`rw-${i}`).value,
+                        work: document.getElementById(`work-${i}`).value,
+                        pregnant: document.getElementById(`gender-${i}`).value === 'female' 
+                            ? document.getElementById(`pregnant-${i}`).value 
+                            : 'false'
+                    };
+                    formList.push(formEntry);
+                }
+            }
+
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+            fetch('{% url "database_add_data" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+                body: JSON.stringify(formList),
+            })
+                .then(() => window.location.href = '{% url "database_home" %}');
+        });
+
+        // Add the first form when the page loads
+        addForm();
+    </script>
+</body>
+</html>

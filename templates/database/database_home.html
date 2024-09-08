@@ -13,6 +13,8 @@
                 <th>Name</th>
                 <th>Gender</th>
                 <th>Age</th>
+                <th>Pregnant</th>
+                <th>Work</th>
                 <th>RT</th>
                 <th>RW</th>
             </tr>
@@ -24,11 +26,19 @@
                 <td>{{ data.name }}</td>
                 <td>{{ data.gender }}</td>
                 <td>{{ data.age }}</td>
+                <td>{{ data.pregnant }}</td>
+                <td>{{ data.work }}</td>
                 <td>{{ data.rt }}</td>
                 <td>{{ data.rw }}</td>
             {% endfor %}
         </tbody>
     </table>
+    {% if user_type == "special_user" %}
+        <button><a href="{% url 'database_form' %}">Add Data</a></button>
+    {% endif %}
+    {% if user_type == "super_user" %}
+        <button><a href="{% url 'database_approval_page' %}">Data Approval</a></button>
+    {% endif %}
     <button><a href="{% url 'event_page' request.user.id %}">Event Page</a></button>
 </body>
 </html>
