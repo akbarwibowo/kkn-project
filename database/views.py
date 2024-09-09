@@ -16,16 +16,60 @@ def database_page(request):
         database = Resident.objects.filter(batch__approved=True).order_by('rw', 'rt').values()
         user_id = request.user.id
         user_type = UserExtend.objects.get(user=user_id).user_type
-        for data in database:
-            today = datetime.date.today()
-            birth_date = data['birth_date']
-            age = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
-            data['age'] = age
+
         if database:
+            child_count = 0
+            elderly_count = 0
+            pregnant_count = 0
+            rw_rt_child_count = {}
+            rw_rt_elderly_count = {}
+            rw_rt_pregnant_count = {}
+            for data in database:
+                today = datetime.date.today()
+                birth_date = data['birth_date']
+                age = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
+                data['age'] = age
+
+                if age < 5:
+                    if data['rw'] in rw_rt_child_count:
+                        if data['rt'] in rw_rt_child_count[data['rw']]:
+                            rw_rt_child_count[data['rw']][data['rt']] += 1
+                        else:
+                            rw_rt_child_count[data['rw']][data['rt']] = 1
+                    else:
+                        rw_rt_child_count[data['rw']] = {data['rt']: 1}
+                    child_count += 1
+                elif age > 60:
+                    if data['rw'] in rw_rt_elderly_count:
+                        if data['rt'] in rw_rt_elderly_count[data['rw']]:
+                            rw_rt_elderly_count[data['rw']][data['rt']] += 1
+                        else:
+                            rw_rt_elderly_count[data['rw']][data['rt']] = 1
+                    else:
+                        rw_rt_elderly_count[data['rw']] = {data['rt']: 1}
+                    elderly_count += 1
+
+                if data['pregnant'] is True:
+                    pregnant_count += 1
+                    if data['rw'] in rw_rt_pregnant_count:
+                        if data['rt'] in rw_rt_pregnant_count[data['rw']]:
+                            rw_rt_pregnant_count[data['rw']][data['rt']] += 1
+                        else:
+                            rw_rt_pregnant_count[data['rw']][data['rt']] = 1
+                    else:
+                        rw_rt_pregnant_count[data['rw']] = {data['rt']: 1}
+
             context = {
                 'database': database,
-                'user_type': user_type
+                'user_type': user_type,
+                'child_count': child_count,
+                'elderly_count': elderly_count,
+                'pregnant_count': pregnant_count,
+                'rw_rt_child_count': rw_rt_child_count,
+                'rw_rt_elderly_count': rw_rt_elderly_count,
+                'rw_rt_pregnant_count': rw_rt_pregnant_count
             }
+
             return render(request, 'database/database_home.html', context=context)
         else:
             context = {
