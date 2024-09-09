@@ -8,4 +8,7 @@ urlpatterns = [
     path('database_approval/', views.database_approval_page, name='database_approval_page'),
     path('database_approve/<int:batch_id>/', views.database_approve, name='database_approve'),
     path('database_revision/<int:batch_id>/', views.database_revision, name='database_revision'),
+    path('database_feedback/', views.database_feedback, name='database_feedback'),
+    path('database_revision_form/<int:batch_id>/', views.database_revision_form, name='database_revision_form'),
+    path('database_revision_do/<int:batch_id>/', views.database_revision_do, name='database_revise_data'),
 ]

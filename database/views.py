@@ -13,7 +13,7 @@ from .models import Batch, Resident, BatchMessage
 
 def database_page(request):
     if request.user.is_authenticated:
-        database = Resident.objects.filter(batch__approved=True).values()
+        database = Resident.objects.filter(batch__approved=True).order_by('rw', 'rt').values()
         user_id = request.user.id
         user_type = UserExtend.objects.get(user=user_id).user_type
         for data in database:
@@ -84,7 +84,9 @@ def database_approval_page(request):
     if request.user.userextend.user_type != 'super_user':
         return HttpResponseRedirect(reverse('database_home'))
 
-    non_approved_batch = Batch.objects.filter(approved=False).values()
+    non_approved_batch = Batch.objects.filter(approved=False, revision=False).values()
+    if not non_approved_batch:
+        return render(request, 'database/database_approval.html', context={'message': 'No data available'})
     for batch in non_approved_batch:
         batch['batch_data'] = Resident.objects.filter(batch_id=batch['id']).values()
         input_person = User.objects.get(id=batch['input_person_id'])
@@ -132,3 +134,90 @@ def database_revision(request, batch_id):
     message.save()
 
     return HttpResponseRedirect(reverse('database_approval_page'))
+
+
+def database_feedback(request):
+    if request.user.userextend.user_type != 'special_user':
+        return HttpResponseRedirect(reverse('database_home'))
+
+    database = Batch.objects.all().values()
+    if not database:
+        return render(request, 'database/database_feedback.html', context={'message': 'No data available'})
+    for batch in database:
+        if batch['revision']:
+            batch['revision_message'] = BatchMessage.objects.get(batch_id=batch['id']).message
+        batch['batch_data'] = Resident.objects.filter(batch_id=batch['id']).values()
+        if batch['approved']:
+            batch['status'] = 'approved'
+        elif batch['revision']:
+            batch['status'] = 'revision'
+        else:
+            batch['status'] = 'waiting for approval'
+
+    context = {
+        'batches': database
+    }
+
+    return render(request, 'database/database_feedback.html', context=context)
+
+
+def database_revision_form(request, batch_id):
+    if request.user.userextend.user_type != 'special_user':
+        return HttpResponseRedirect(reverse('database_home'))
+
+    batch_list = []
+    batch_data = Resident.objects.filter(batch_id=batch_id).values()
+    for data in batch_data:
+        date_obj = data['birth_date']
+        formated_date = date_obj.strftime('%Y-%m-%d')
+        batch_dict = {
+            'name': data['name'],
+            'gender': data['gender'],
+            'birthdate': formated_date,
+            'rt': data['rt'],
+            'rw': data['rw'],
+            'pregnant': data['pregnant'],
+            'work': data['work']
+        }
+        batch_list.append(batch_dict)
+
+    initial_data = {
+        'batches': batch_list,
+    }
+
+    context = {
+        'initial_data': json.dumps(initial_data),
+        'batch_id': batch_id
+    }
+
+    return render(request, 'database/database_revision_form.html', context=context)
+
+
+def database_revision_do(request, batch_id):
+    try:
+        batch = Batch.objects.get(id=batch_id)
+        if batch.revision is True:
+            batch.revision = False
+            batch.save()
+
+            batch_message = BatchMessage.objects.get(batch=batch_id)
+            batch_message.delete()
+
+        form_data = json.loads(request.body.decode('utf-8'))
+        batch_data = Resident.objects.filter(batch_id=batch_id).values()
+
+        for data in range(len(batch_data)):
+            edited_data = Resident.objects.get(id=batch_data[data]['id'])
+            edited_data.name = form_data['batches'][data]['name']
+            edited_data.gender = form_data['batches'][data]['gender']
+            edited_data.birth_date = form_data['batches'][data]['birthdate']
+            edited_data.rt = int(form_data['batches'][data]['rt'])
+            edited_data.rw = int(form_data['batches'][data]['rw'])
+            edited_data.work = form_data['batches'][data]['work']
+            edited_data.pregnant = form_data['batches'][data]['pregnant']
+
+            edited_data.save()
+        return HttpResponseRedirect(reverse('database_feedback'))
+    except Exception as e:
+        print(e)
+        return HttpResponseRedirect(reverse('database_feedback'))

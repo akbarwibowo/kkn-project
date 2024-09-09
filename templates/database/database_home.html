@@ -35,6 +35,7 @@
     </table>
     {% if user_type == "special_user" %}
         <button><a href="{% url 'database_form' %}">Add Data</a></button>
+        <button><a href="{% url 'database_feedback' %}">Data Feedback</a></button>
     {% endif %}
     {% if user_type == "super_user" %}
         <button><a href="{% url 'database_approval_page' %}">Data Approval</a></button>
