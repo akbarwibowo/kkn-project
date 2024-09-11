@@ -1,36 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Home</title>
-</head>
-<body>
-    <h1>Hello {{ request.user.username }}</h1>
-    <h2>{{ message }}</h2>
-    <ul>
-        {% for info in informations %}
-            <li>name: {{ info.info_name }}</li>
-            <li>description: {{ info.info_description }}</li>
-            {% if info.info_image %}
-                    <img src="data:image/jpeg;base64,{{ info.info_image|safe }}" alt="image">
-                {% endif %}
-            <li>{{ info.info_created_date }}</li>
-        {% endfor %}
-    </ul>
-    <h1>{{ request.user.id }}</h1>
-    {% if request.user.is_authenticated %}
-        <button><a href="{% url 'logout' %}">Logout</a></button>
-        <button><a href="{% url 'add_info_page' %}">Add Info</a></button>
-        {% if user_type == 'super_user' %}
-            <button><a href="{% url 'acc_form' request.user.id %}">ACC form</a> </button>
+{% extends 'master/master_navbar.html' %}
+{% block title %}Informasi Desa{% endblock %}
+{% block page_title %}Informasi Desa{% endblock %}
+
+{% block content %}
+    <main class="main-content">
+        {% if message %}
+        <div class="alert alert-danger" role="alert">
+            {{ message }}
+        </div>
         {% endif %}
-        <button><a href="{% url 'feedback_info' request.user.id %}">Info Feedback</a> </button>
-        <button><a href="{% url 'event_page' request.user.id %}">Events</a></button>
-        {{ message }}
-        <h1>user type: {{ user_type }}</h1>
-    {% else %}
-        <button><a href="{% url 'login' %}">Login</a></button>
-        <button><a href="{% url 'register' %}">Register</a></button>
-    {% endif %}
-</body>
-</html>
+
+        {% for info in informations %}
+            <div class="card">
+                <img src="data:image/jpeg;base64, {{ info.info_image|safe }}" alt="image">
+                <div class="card-content">
+                    <h2 class="card-title">{{ info.name }}</h2>
+                </div>
+            </div>
+        {% endfor %}
+    </main>
+{% endblock %}

@@ -10,12 +10,12 @@
     <title>Login</title>
 </head>
 <body>
-    {% if message %}
-        <div class="alert alert-danger" role="alert">
-            {{ message }}
-        </div>
-    {% endif %}
     <div class="container">
+        {% if message %}
+            <div class="alert alert-danger" role="alert">
+                {{ message }}
+            </div>
+        {% endif %}
         <form class="form w-10 w-md-50" action="{% url 'login' %}" method="POST">
             {% csrf_token %}
             <h1 class="text-center mb-4">Login</h1>
@@ -28,6 +28,7 @@
             <button type="submit" class="btn btn-success w-100 mt-3">Login</button>
         </form>
         <p class="text-center mt-3">Belum memiliki akun? <a href="{% url 'register' %}" class="login-link">Register</a></p>
+        <button class="btn btn-danger"><a class="nav-link" href="{% url 'home' %}">Kembali</a></button>
     </div>
 </body>
 </html>

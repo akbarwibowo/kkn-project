@@ -12,5 +12,6 @@ urlpatterns = [
     path('revision/<int:info_id>/', views.info_revision_form, name='revision'),
     path('revision_info_do/<int:info_id>/', views.info_do_revision, name='revision_info_do'),
     path('delete_info/<int:info_id>/', views.info_delete, name='delete_info'),
+    path('info_detail/<int:info_id>/', views.info_detail, name='detail_info'),
 ]
 

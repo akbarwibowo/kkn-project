@@ -16,7 +16,7 @@ def home(request):
     for info in informations:
         info['info_image'] = base64.b64encode(info['info_image']).decode('utf-8')
 
-    message = "There is no information available" if not informations else ""
+    message = "Belum ada informasi." if not informations else ""
     context = {
         'informations': informations,
         'message': message,
@@ -137,14 +137,14 @@ def info_feedback(request, user_id):
                 info['info_message'] = info_messages.message
                 info['status'] = info_messages.type
             elif not info['approved']:
-                info['info_message'] = 'Waiting for approval'
-                info['status'] = 'Pending'
+                info['info_message'] = '-'
+                info['status'] = 'Menunggu disetujui'
             else:
-                info['info_message'] = 'Published'
-                info['status'] = 'Approved'
+                info['info_message'] = 'Sudah dipulikasikan'
+                info['status'] = 'Disetujui'
 
     else:
-        return render(request, 'info_desa/feedback_info.html', context={'message': 'There is no information available'})
+        return render(request, 'info_desa/feedback_info.html', context={'message': 'Belum ada informasi'})
     context = {
         'informations': informations,
     }
@@ -192,3 +192,12 @@ def info_delete(request, info_id):
         info.delete()
 
     return HttpResponseRedirect(reverse('feedback_info', args=(request.user.id,)))
+
+
+def info_detail(request, info_id):
+    try:
+        info = Information.objects.get(id=info_id)
+
+        return render(request, 'info_desa/info_detail.html', context={'info': info})
+    except Exception as e:
+        HttpResponseRedirect(reverse('home'))
