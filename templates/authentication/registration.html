@@ -1,39 +1,55 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <title>Registration</title>
 </head>
 <body>
-    {{ message }}
-    <form action="{% url 'register' %}" method="POST">
-        {% csrf_token %}
-        <label for="name">Name:</label>
-        <input type="text" id="username" name="username" placeholder="Name" required><br><br>
-
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" placeholder="Email"><br><br>
-
-        <label for="phone">Phone:</label>
-        <input type="text" id="phone" name="phone" placeholder="Phone" required><br><br>
-
-        <label for="rt">RT:</label>
-        <input type="number" id="rt" name="rt" placeholder="rt" required><br><br>
-
-        <label for="rw">RW:</label>
-        <input type="number" id="rw" name="rw" placeholder="rw" required><br><br>
-
-        <label for="as">AS:</label>
-        <select id="usertype" name="usertype">
-            <option value="resident">Resident</option>
-            <option value="rt">RT</option>
-            <option value="rw">RW</option>
-        </select><br><br>
-
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" placeholder="Password" required><br><br>
-
-        <button type="submit">Register</button>
-    </form>
+    {% if message %}
+        <div class="alert alert-danger" role="alert">
+            {{ message }}
+        </div>
+    {% endif %}
+    <div class="container">
+        <form class="form w-10 w-md-50" action="{% url 'register' %}" method="post">
+            {% csrf_token %}
+            <h1 class="text-center mb-4">Daftar</h1>
+            <div class="input-box mb-3">
+                <input type="text" name="username" id="username" placeholder="Nama" required class="form-control">
+            </div>
+            <div class="input-box mb-3">
+                <input type="text" name="phone" id="phone" placeholder="Nomor Ponsel" class="form-control">
+            </div>
+            <div class="input-box mb-3">
+                <input type="email" name="email" id="email" placeholder="E-mail" class="form-control">
+            </div>
+            <div class="row mb-3 gx-3">
+                <div class="input-box col-6">
+                    <input type="number" name="rt" id="rw" placeholder="RT" class="form-control">
+                </div>
+                <div class="input-box col-6">
+                    <input type="number" name="rw" id="rw" placeholder="RW" class="form-control">
+                </div>
+            </div>
+            <div class="input-box mb-3">
+                <select class="form-select" aria-label="Default select example" required name="usertype" id="usertype">
+                      <option selected>Pilih jenis pendaftar</option>
+                      <option value="resident">Penduduk</option>
+                      <option value="rt">Ketua RT</option>
+                      <option value="rw">Ketua RW</option>
+                </select>
+            </div>
+            <div class="input-box mb-3">
+                <input type="password" name="password" id="password" placeholder="Kata Sandi" required class="form-control">
+            </div>
+            <button type="submit" class="btn btn-success w-100 mt-3">Daftar</button>
+        </form>
+        <p class="text-center mt-3">Sudah punya akun? <a href="{% url 'login' %}">Login</a></p>
+    </div>
 </body>
 </html>

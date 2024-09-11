@@ -3,7 +3,8 @@ from .models import UserExtend, User
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
-from django.http import HttpResponseRedirect
+from django.db import IntegrityError
+
 
 # Create your views here.
 
@@ -13,12 +14,13 @@ def register(request):
         return redirect(reverse('home'))
     if request.method == 'POST':
         try:
-            username = request.POST.get('username')
+            username = str(request.POST.get('username')).lower()
             email = request.POST.get('email')
             password = request.POST.get('password')
             auth = authenticate(request, username=username, password=password)
             if auth is not None:
-                return render(request, 'authentication/registration.html', context={'message': 'username already exists'})
+                return render(request, 'authentication/registration.html',
+                              context={'message': 'username already exists'})
             phone = request.POST.get('phone')
             rt = request.POST.get('rt')
             rw = request.POST.get('rw')
@@ -41,8 +43,13 @@ def register(request):
             login(request, user)
 
             return redirect((reverse('event_page', args=(request.user.id,))))
+        except ValueError as e:
+            return render(request, 'authentication/registration.html', context={'message': 'Invalid input: ' + str(e)})
+        except IntegrityError as e:
+            return render(request, 'authentication/registration.html', context={'message': 'Database error: ' + str(e)})
         except Exception as e:
-            return render(request, 'authentication/registration.html', context={'message': e})
+            return render(request, 'authentication/registration.html',
+                          context={'message': 'An unexpected error occurred: ' + str(e)})
     return render(request, 'authentication/registration.html')
 
 
@@ -64,9 +71,11 @@ def log_in(request):
                 login(request, user)
                 return redirect(reverse('event_page', args=(request.user.id,)))
             else:
-                return render(request, 'authentication/login_page.html', context={'message': 'Username or password is incorrect'})
+                return render(request, 'authentication/login_page.html',
+                              context={'message': 'Username or password is incorrect'})
         except Exception as e:
-            return render(request, 'authentication/login_page.html', context={'message': e})
+            return render(request, 'authentication/login_page.html',
+                          context={'message': 'An unexpected error occurred. Please try again later.'})
 
     return render(request, 'authentication/login_page.html')
 
