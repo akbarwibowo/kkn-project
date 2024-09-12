@@ -1,0 +1,36 @@
+{% extends 'master/master_navbar.html' %}
+{% block title %}{{ info.info_name }}{% endblock %}
+{% block page_title %}{{ info.info_name }}{% endblock %}
+
+{% block content %}
+    <main class="main-content">
+        <div class="card" style="width: 90%">
+            <img src="data:image/jpeg;base64, {{ info.info_image|safe }}" alt="image" class="card-img-top">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <p class="card-text">Penulis: {{ info.maker }}</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col">
+                        <p class="card-text">Tanggal Dibuat: {{ info.info_created_date }}</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col">
+                        <p class="card-text">{{ info.info_description }}</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col text-center">
+                        <a href="{% url 'home' %}" class="btn btn-primary">Kembali</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

@@ -11,52 +11,39 @@
                 </div>
             {% endif %}
         </div>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Nama Informasi</th>
-                    <th scope="col">Pesan</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Tanggal Dibuat</th>
-                    <th scope="col">Action</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                {% for info in informations %}
+        <div class="table-responsive-sm">
+            <table class="table">
+                <thead>
                     <tr>
-                        <th scope="row">{{ forloop.counter }}</th>
-                        <td>{{ info.info_name }}</td>
-                        <td>{{ info.info_message }}</td>
-                        <td>{{ info.status }}</td>
-                        <td>{{ info.info_created_date }}</td>
-                        <td>
-                            {% if info.status == 'revision' %}
-                                <button class="btn btn-warning"><a class="nav-link" href="{% url 'revision' info.id %}">Revision</a></button>
-                                <button class="btn btn-danger"><a class="nav-link" href="{% url 'delete_info' info.id %}">Delete</a></button>
-                            {% else %}
-                                <button class="btn btn-danger"><a class="nav-link" href="{% url 'delete_info' info.id %}">Delete</a></button>
-                            {% endif %}
-                        </td>
+                        <th scope="col">#</th>
+                        <th scope="col">Nama Informasi</th>
+                        <th scope="col">Pesan</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Tanggal Dibuat</th>
+                        <th scope="col">Action</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-{#        {% for info in informations %}#}
-{#            <li>#}
-{#                info name: {{ info.info_name }}#}
-{#                info message: {{ info.info_message }}#}
-{#                status: {{ info.status }}#}
-{#                {% if info.status == 'revision' %}#}
-{#                    <button><a href="{% url 'revision' info.id %}">Revision</a></button>#}
-{#                    <button><a href="{% url 'delete_info' info.id %}">Delete</a></button>#}
-{##}
-{#                {% else %}#}
-{#                    <button><a href="{% url 'delete_info' info.id %}">Delete</a></button>#}
-{#                {% endif %}#}
-{#            </li>#}
-{#        {% endfor %}#}
-{#        <button><a href="{% url 'home' %}">Home</a></button>#}
+                </thead>
+    
+                <tbody>
+                    {% for info in informations %}
+                        <tr>
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td>{{ info.info_name }}</td>
+                            <td>{{ info.info_message }}</td>
+                            <td>{{ info.status }}</td>
+                            <td>{{ info.info_created_date }}</td>
+                            <td>
+                                {% if info.status == 'revision' %}
+                                    <button class="btn btn-warning"><a class="nav-link" href="{% url 'revision' info.id %}">Revision</a></button>
+                                    <button class="btn btn-danger"><a class="nav-link" href="{% url 'delete_info' info.id %}">Delete</a></button>
+                                {% else %}
+                                    <button class="btn btn-danger"><a class="nav-link" href="{% url 'delete_info' info.id %}">Delete</a></button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 {% endblock %}

@@ -1,37 +1,75 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>ACC Information</title>
-</head>
-<body>
-    <ul>
+{% extends 'master/master_navbar.html' %}
+{% block title %}ACC Informasi Desa{% endblock %}
+{% block page_title %}ACC Informasi Desa{% endblock %}
+
+{% block content %}
+    <main class="main-content">
+        {% if message %}
+        <div class="alert alert-danger" role="alert">
+            {{ message }}
+        </div>
+        {% endif %}
+
         {% for info in informations %}
-            <li>{{ info.info_name }}</li>
-            <li>{{ info.info_description }}</li>
-            {% if info.info_image %}
-                <img src="data:image/jpeg;base64,{{ info.info_image|safe }}" alt="image">
-            {% endif %}
-            <li>{{ info.info_created_date }}</li>
-            <li>
-                maker: {{ info.info_maker }}
-                <button><a href="{% url 'acc_info' info.id request.user.id %}">Accept</a> </button>
-                <form action="{% url 'reject_info' info.id request.user.id %}" method="post">
-                    {% csrf_token %}
-                    <label for="reject_message">Message of Rejection</label>
-                    <input type="text" name="reject_message" id="reject_message" placeholder="Message of Rejection" required>
-                    <button type="submit">Reject</button>
-                </form>
-            
-                <form action="{% url 'revise_info' info.id request.user.id %}" method="post">
-                    {% csrf_token %}
-                    <label for="revision_message">Message of Revision</label>
-                    <input type="text" name="revision_message" id="revision_message" placeholder="Message of Revision" required>
-                    <button type="submit">Revise</button>
-                </form>
-            </li>
+            <div class="card" style="width: 90%">
+                <div class="card-header">
+                    <h1>{{ info.info_name }}</h1>
+                </div>
+                <img src="data:image/jpeg;base64, {{ info.info_image|safe }}" alt="image" class="card-img-top">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <p class="card-text fw-bold">Penulis: {{ info.info_maker }}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col">
+                            <p class="card-text fw-bold">Tanggal Dibuat: {{ info.info_created_date }}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col">
+                            <p class="card-text fw-bold">Deskripsi:</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <p class="card-text">{{ info.info_description }}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col">
+                            <form action="{% url 'revise_info' info.id request.user.id %}" method="post">
+                                {% csrf_token %}
+                                <label class="form-label" for="revision_message">Pesan revisi:</label>
+                                <input type="text" class="form-control" name="revision_message" id="revision_message" placeholder="Pesan revisi" required>
+                                <button class="btn btn-warning mt-2" type="submit">Revisi</button>
+                            </form>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col">
+                            <form action="{% url 'reject_info' info.id request.user.id %}" method="post">
+                                {% csrf_token %}
+                                <label class="form-label" for="reject_message">Pesan penolakan:</label>
+                                <input type="text" class="form-control" name="reject_message" id="reject_message" placeholder="Pesan penolakan" required>
+                                <button class="btn btn-danger mt-2" type="submit">Tolak</button>
+                            </form>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col text-center">
+                            <a href="{% url 'acc_info' info.id request.user.id %}" class="btn btn-success">Izinkan</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         {% endfor %}
-    </ul>
-    <button><a href="{% url 'home' %}">Home</a></button>
-</body>
-</html>
+    </main>
+{% endblock %}

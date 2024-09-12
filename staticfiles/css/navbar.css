@@ -1,3 +1,266 @@
+/** {*/
+/*    margin: 0;*/
+/*    padding: 0;*/
+/*    box-sizing: border-box;*/
+/*    font-family: 'Poppins', sans-serif;*/
+/*}*/
+
+/*body {*/
+/*    background-color: #F1F1F1;*/
+/*}*/
+
+/*.header {*/
+/*    background-color: #F1F1F1;*/
+/*    padding: 15px;*/
+/*    display: flex;*/
+/*    justify-content: space-between;*/
+/*    align-items: center;*/
+/*}*/
+
+/*.navbar {*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    width: 100%;*/
+/*}*/
+
+/*.menu-toggle {*/
+/*    background: none;*/
+/*    border: none;*/
+/*    font-size: 20px;*/
+/*    cursor: pointer;*/
+/*    margin-right: 10px;*/
+/*}*/
+
+/*.title {*/
+/*    flex-grow: 1;*/
+/*    text-align: center;*/
+/*    font-weight: 600;*/
+/*    font-size: 20px;*/
+/*}*/
+
+/*.profile-button {*/
+/*    background: none;*/
+/*    border: none;*/
+/*    font-size: 20px;*/
+/*    cursor: pointer;*/
+/*}*/
+
+/*.main-content {*/
+/*    padding: 20px;*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    align-items: center;*/
+/*}*/
+
+/*.card {*/
+/*    padding-top: 1rem;*/
+/*    padding-right: 1rem;*/
+/*    padding-left: 1rem;*/
+/*    background-color: #ffffff;*/
+/*    border-radius: 10px;*/
+/*    overflow: hidden;*/
+/*    margin-bottom: 20px;*/
+/*    max-width: 400px;*/
+/*    width: 100%;*/
+/*    box-shadow: 0px 5px 10px -5px rgba(0, 0, 0, 0.5); !*x, y, blur, spread radius*!*/
+/*}*/
+
+/*.card-image {*/
+/*    border-radius: 10px;*/
+/*    width: 100%;*/
+/*    height: auto;*/
+/*    display: block;*/
+/*    !* box-shadow: 0px 10px 10px 0px rgba(0, 0, 0, 0.5); x, y, blur, spread radius, *!*/
+/*}*/
+
+/*.card-content {*/
+/*    padding-top: 15px;*/
+/*    color: rgb(0, 0, 0);*/
+/*}*/
+
+/*.card-title {*/
+/*    font-size: 18px;*/
+/*    font-weight: 600;*/
+/*    margin-bottom: 10px;*/
+/*}*/
+
+/*.card-description {*/
+/*    font-size: 14px;*/
+/*    line-height: 1.5;*/
+/*}*/
+
+/*.profil {*/
+/*    line-height: 1;*/
+/*    margin: 0;*/
+/*    padding: 0;*/
+/*}*/
+
+/*.profil-desk {*/
+/*    margin-left: 1rem;*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    justify-content: center;*/
+/*    gap: 0;*/
+/*}*/
+
+/*.profil-link {*/
+/*    color: antiquewhite;*/
+/*    font-size: 25px;*/
+/*    font-weight: 900;*/
+/*    text-decoration: none;*/
+/*}*/
+
+
+/*.offcanvas-start {*/
+/*    --bs-offcanvas-width: 85%;*/
+/*    background-color: #335079;*/
+/*}*/
+
+/*.offcanvas-end {*/
+/*    --bs-offcanvas-width: 85%;*/
+/*    background-color: #335079;*/
+/*}*/
+
+/*.offcanvas-header {*/
+/*    justify-content: center;*/
+/*}*/
+
+/*.navbar-body {*/
+/*    color: aliceblue;*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+
+/*}*/
+
+/*.navbar-body > div {*/
+/*    position: relative; !* Mengatur posisi relatif *!*/
+/*    box-shadow: 0px 10px 25px 0px rgba(0, 0, 0, 0.5); !* x, y, blur, spread radius, *!*/
+/*    background-color: #233652;*/
+/*    padding: 15px 20px;*/
+/*}*/
+
+/*!* Atur z-index setiap elemen agar tidak menimpa (harus pake position:relative; *!*/
+/*.navbar-keluar {*/
+/*    z-index: 3;*/
+/*}*/
+
+/*.navbar-tambah {*/
+/*    z-index: 2;*/
+/*}*/
+
+/*.navbar-kalender {*/
+/*    z-index: 1;*/
+/*}*/
+
+/*.navbar-keluar {*/
+/*    height: 50px;*/
+/*    background-color: #233652;*/
+/*}*/
+
+/*.navbar-tambah {*/
+/*    background-color: #233652;*/
+
+/*}*/
+
+/*.navbar-kalender {*/
+/*    background-color: #233652;*/
+/*}*/
+
+/*.submenuInfoClass div {*/
+/*    padding: 5px 25px;*/
+/*    background: rgb(1, 87, 174);*/
+/*    cursor: pointer;*/
+/*}*/
+
+/*.submenuInfoClass div:hover {*/
+/*    background-color: #b3b3b3;*/
+/*    transition: background-color 0.3s ease;*/
+/*}*/
+
+/*.submenuInfoClass {*/
+/*    border:#ffffff;*/
+/*}*/
+
+/*.submenuKegiatanClass div {*/
+/*    padding: 5px 25px;*/
+/*    background: rgb(1, 87, 174);*/
+/*    cursor: pointer;*/
+/*}*/
+
+/*.submenuKegiatanClass div:hover {*/
+/*    background-color: #b3b3b3;*/
+/*    transition: background-color 0.3s ease;*/
+/*}*/
+
+/*.submenuKegiatanClass {*/
+/*    border:#ffffff;*/
+/*}*/
+
+/*.submenuDatabaseClass div {*/
+/*    padding: 5px 25px;*/
+/*    background: rgb(1, 87, 174);*/
+/*    cursor: pointer;*/
+/*}*/
+
+/*.submenuDatabaseClass div:hover {*/
+/*    background-color: #b3b3b3;*/
+/*    transition: background-color 0.3s ease;*/
+/*}*/
+
+/*.submenuDatabaseClass {*/
+/*    border:#ffffff;*/
+/*}*/
+
+/*.nt {*/
+/*    padding: 1rem;*/
+/*    display: flex;*/
+/*    justify-content: space-between;*/
+/*}*/
+
+/*.navbar-body a {*/
+/*    text-decoration: none; !* Menghilangkan underline *!*/
+/*    color: inherit;*/
+/*}*/
+
+
+/*!* Media Queries untuk Responsivitas *!*/
+/*@media (min-width: 450px) {*/
+/*    .card {*/
+/*        max-width: 90%;*/
+/*        width: 100%;*/
+/*    }*/
+/*    .offcanvas-end {*/
+/*        --bs-offcanvas-width: 80%; !* Sesuaikan lebar sesuai kebutuhan *!*/
+/*    }*/
+/*}*/
+
+/*@media (min-width: 550px) {*/
+/*    .card {*/
+/*        max-width: 90%;*/
+/*        width: 100%;*/
+/*    }*/
+/*    .offcanvas-end {*/
+/*        --bs-offcanvas-width: 50%; !* Sesuaikan lebar sesuai kebutuhan *!*/
+/*    }*/
+/*}*/
+
+/*@media (min-width: 800px) {*/
+/*    .card {*/
+/*        max-width: 90%;*/
+/*        width: 100%;*/
+/*    }*/
+/*    .offcanvas-start {*/
+/*        --bs-offcanvas-width: 85%;*/
+/*    }*/
+/*    .offcanvas-end {*/
+/*        --bs-offcanvas-width: 25%; !* Sesuaikan lebar sesuai kebutuhan *!*/
+/*    }*/
+/*    .title {*/
+/*        font-size: 35px;*/
+/*    }*/
+
+/*}*/
+
 * {
     margin: 0;
     padding: 0;
@@ -60,8 +323,7 @@ body {
     border-radius: 10px;
     overflow: hidden;
     margin-bottom: 20px;
-    max-width: 400px;
-    width: 100%;
+    width: 80%;
     box-shadow: 0px 5px 10px -5px rgba(0, 0, 0, 0.5); /*x, y, blur, spread radius*/
 }
 
@@ -79,14 +341,42 @@ body {
 }
 
 .card-title {
-    font-size: 18px;
+    font-size: 11px;
     font-weight: 600;
-    margin-bottom: 10px;
+    margin-bottom: 3px;
 }
 
 .card-description {
-    font-size: 14px;
-    line-height: 1.5;
+    font-size: 7px;
+}
+
+.keterangan {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.info-penulis {
+    display: flex;
+    align-items: center;
+}
+
+.profile-icon {
+    margin-right: 2px;
+}
+
+.penulis {
+    font-size: 7px;
+}
+
+.tanggal {
+    color: #ffffff;
+    font-weight: 600;
+    width: 30%;
+    background-color: #00A69B;
+    text-align: center;
+    border-radius: 10px 10px 0 0;
+    line-height: 20px;
 }
 
 .profil {
@@ -260,3 +550,4 @@ body {
     }
 
 }
+

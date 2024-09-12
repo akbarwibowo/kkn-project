@@ -1,6 +1,8 @@
 {% extends 'master/master_navbar.html' %}
+{% load static %}
 {% block title %}Informasi Desa{% endblock %}
 {% block page_title %}Informasi Desa{% endblock %}
+{% block style_sheet %}{% static 'css/home.css' %}{% endblock %}
 
 {% block content %}
     <main class="main-content">
@@ -11,10 +13,29 @@
         {% endif %}
 
         {% for info in informations %}
-            <div class="card">
-                <img src="data:image/jpeg;base64, {{ info.info_image|safe }}" alt="image">
-                <div class="card-content">
-                    <h2 class="card-title">{{ info.name }}</h2>
+            <div class="card" style="width: 90%">
+                <div class="card-header">
+                    <h1>{{ info.info_name }}</h1>
+                </div>
+                <img src="data:image/jpeg;base64, {{ info.info_image|safe }}" alt="image" class="card-img-top">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <p class="card-text">Penulis: {{ info.maker }}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col">
+                            <p class="card-text">Tanggal Dibuat: {{ info.info_created_date }}</p>
+                        </div>
+                    </div>
+                    <hr>
+                   <div class="row">
+                        <div class="col text-center">
+                            <a href="{% url 'detail_info' info.id %}" class="btn btn-primary">Detail</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         {% endfor %}

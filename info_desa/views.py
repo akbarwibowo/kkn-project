@@ -15,6 +15,7 @@ def home(request):
     informations = Information.objects.filter(approved=True).order_by('-info_created_date').values()
     for info in informations:
         info['info_image'] = base64.b64encode(info['info_image']).decode('utf-8')
+        info['maker'] = Information.objects.get(id=info['id']).user.user.username
 
     message = "Belum ada informasi." if not informations else ""
     context = {
@@ -75,7 +76,7 @@ def info_acc_form(request, user_id):
             info['info_maker'] = info_maker
 
     if informations is None or len(informations) == 0:
-        message = "There is no information need to accept"
+        message = "Tidak ada informasi untuk di proses"
         return render(request, 'info_desa/acc_form_page.html', context={'message': message})
 
     context = {
@@ -196,7 +197,9 @@ def info_delete(request, info_id):
 
 def info_detail(request, info_id):
     try:
-        info = Information.objects.get(id=info_id)
+        info = Information.objects.filter(id=info_id).values()[0]
+        info['info_image'] = base64.b64encode(info['info_image']).decode('utf-8')
+        info['maker'] = Information.objects.get(id=info['id']).user.user.username
 
         return render(request, 'info_desa/info_detail.html', context={'info': info})
     except Exception as e:
