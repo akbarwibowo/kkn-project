@@ -14,15 +14,15 @@
                 {% csrf_token %}
                 <div class="mb-3">
                     <label for="exampleFormControlInput1" class="form-label">Nama/Judul Informasi</label>
-                    <input type="text" name="info_name" class="form-control" id="exampleFormControlInput1" placeholder="Masukkan judul">
+                    <input type="text" name="info_name" class="form-control" id="exampleFormControlInput1" placeholder="Masukkan judul" required>
                 </div>
                 <div class="mb-3">
                     <label for="exampleFormControlTextarea1" class="form-label">Deskripsi Informasi</label>
-                    <textarea name="info_description" class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Masukkan deskripsi"></textarea>
+                    <textarea name="info_description" class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Masukkan deskripsi" required></textarea>
                 </div>
                 <div class="mb-3">
                     <label for="formFile" class="form-label">Gambar Informasi</label>
-                    <input class="form-control" type="file" id="formFile" name="info_image" accept="image/*">
+                    <input class="form-control" type="file" id="formFile" name="info_image" accept="image/*" required>
                 </div>
                 <button type="submit" class="btn d-flex btn-primary w-100 justify-content-center text-center">Submit</button>
             </form>

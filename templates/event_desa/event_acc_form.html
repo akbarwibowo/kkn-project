@@ -1,39 +1,91 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>ACC Event</title>
-</head>
-<body>
-    <h1>ACC Event</h1>
-    <p>{{ message }}</p>
-    <ul>
-        {% for event in events %}
-            <li>
-                event name: {{ event.event_name }}
-                event description: {{ event.event_description }}
-                event date: {{ event.event_date }}
-                event time: {{ event.event_time }}
-                event location: {{ event.event_location }}
-                event target: {{ event.event_target }}
-                event maker: {{ event.event_maker }}
-                <button><a href="{% url 'event_accept' event.id request.user.id %}">ACC</a></button>
-                <form action="{% url 'event_reject' event.id request.user.id %}" method="post">
-                    {% csrf_token %}
-                    <label for="reject_message">Message of rejection</label>
-                    <input type="text" id="reject_message" name="reject_message">
-                    <button type="submit">Reject</button>
-                </form>
-                <form action="{% url 'event_revision' event.id request.user.id %}" method="post">
-                    {% csrf_token %}
-                    <label for="revision_message">Message of revision</label>
-                    <input type="text" id="revision_message" name="revision_message">
-                    <button type="submit">Revision</button>
-                </form>
-            </li>
-        {% endfor %}
-    </ul>
+{% extends 'master/master_navbar.html' %}
+{% block title %}ACC Kegiatan Desa{% endblock %}
+{% block page_title %}ACC Kegiatan Desa{% endblock %}
 
-    <button><a href="{% url 'event_page' request.user.id %}">Home</a></button>
-</body>
-</html>
+{% block content %}
+    <main class="main-content">
+    {% if message %}
+        <div class="alert alert-danger" role="alert">
+            {{ message }}
+        </div>
+    {% endif %}
+    
+    {% for event in events %}
+        <div class="card" style="width: 90%">
+            <div class="card-header">
+                <h1>{{ event.event_name }}</h1>
+            </div>
+            
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <p class="card-text fw-bold">Penulis: {{ event.event_maker }}</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col">
+                        <p class="card-text fw-bold">Target Kegiatan: {{ event.event_target }}</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col">
+                        <p class="card-text fw-bold">Lokasi Kegiatan: {{ event.event_location }}</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col">
+                        <p class="card-text fw-bold">Tanggal Kegiatan: {{ event.event_date }}</p>
+                    </div>
+                </div>
+                <hr><div class="row">
+                    <div class="col">
+                        <p class="card-text fw-bold">Waktu Kegiatan: {{ event.event_time }}</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col">
+                        <p class="card-text fw-bold">Deskripsi:</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <p class="card-text">{{ event.event_description }}</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                        <div class="col">
+                            <form action="{% url 'event_revision' event.id request.user.id %}" method="post">
+                                {% csrf_token %}
+                                <label class="form-label" for="revision_message">Pesan revisi:</label>
+                                <input type="text" class="form-control" name="revision_message" id="revision_message" placeholder="Pesan revisi" required>
+                                <button class="btn btn-warning mt-2" type="submit">Revisi</button>
+                            </form>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col">
+                            <form action="{% url 'event_reject' event.id request.user.id %}" method="post">
+                                {% csrf_token %}
+                                <label class="form-label" for="reject_message">Pesan penolakan:</label>
+                                <input type="text" class="form-control" name="reject_message" id="reject_message" placeholder="Pesan penolakan" required>
+                                <button class="btn btn-danger mt-2" type="submit">Tolak</button>
+                            </form>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col text-center">
+                            <a href="{% url 'event_accept' event.id request.user.id %}" class="btn btn-success">Izinkan</a>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    {% endfor %}
+    </main>
+{% endblock %}

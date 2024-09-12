@@ -5,7 +5,6 @@ from registration.models import UserExtend
 from .models import Event, EventMessage
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from datetime import date
 
 
 # Create your views here.
@@ -17,7 +16,10 @@ def event_page(request, user_id):
             return HttpResponseRedirect(reverse('home'))
 
         events = Event.objects.filter(approved=True).values()
-        message = "There is no event available" if not events else ""
+        for event in events:
+            event_maker = Event.objects.get(id=event['id']).user.user.username
+            event['event_maker'] = event_maker
+        message = "Belum ada kegiatan!" if not events else ""
         context = {
             'events': events,
             'message': message,
@@ -73,7 +75,7 @@ def event_acc_form(request, user_id):
             for event in events:
                 event_maker = Event.objects.get(id=event['id']).user.user.username
                 event['event_maker'] = event_maker
-        message = "There is no event available" if not events else ""
+        message = "Belum ada kegiatan untuk diproses!" if not events else ""
         context = {
             'events': events,
             'message': message,
@@ -135,15 +137,15 @@ def event_feedback(request, user_id):
                 event['event_message'] = event_message.message
                 event['status'] = event_message.type
             elif not event['approved']:
-                event['event_message'] = 'Waiting for approval'
-                event['status'] = 'Pending'
+                event['event_message'] = '-'
+                event['status'] = 'Menunggu disetujui'
             else:
-                event['event_message'] = 'Published'
-                event['status'] = 'Approved'
+                event['event_message'] = 'Sudah dipublikasikan'
+                event['status'] = 'Disetujui'
 
         return render(request, 'event_desa/feedback_event.html', context={'events': events})  # Return after the loop
     else:
-        return render(request, 'event_desa/feedback_event.html', context={'message': 'There is no event available'})
+        return render(request, 'event_desa/feedback_event.html', context={'message': 'Belum ada kegiatan ditambahkan!'})
 
 
 def event_revision_form(request, event_id):

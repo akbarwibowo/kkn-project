@@ -1,38 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Events</title>
-</head>
-<body>
-    <h1>Welcome to the event page</h1>
-    {{ message }}
-    {% for event in events %}
-        <li>
-            event name: {{ event.event_name }}
-            event description: {{ event.event_description }}
-            event date: {{ event.event_date }}
-            event time: {{ event.event_time }}
-            event location: {{ event.event_location }}
-            event target: {{ event.event_target }}
-        </li>
-    {% endfor %}
+{% extends 'master/master_navbar.html' %}
 
-    {% if request.user.is_authenticated %}
-        <button><a href="{% url 'logout' %}">Logout</a></button>
-        <button><a href="{% url 'add_event_form' %}">Add Event</a></button>
-        {% if user_type == 'super_user' %}
-            <button><a href="{% url 'event_acc_form' request.user.id %}">ACC form</a> </button>
+{% load static %}
+
+{% block title %}Kegiatan Desa{% endblock %}
+{% block style_sheet %}{% static 'css/event.css' %}{% endblock %}
+{% block page_title %}Kegiatan Desa{% endblock %}
+
+{% block content %}
+    <div class="container d-flex justify-content-center">
+        {% if message %}
+            <div class="alert alert-danger" role="alert">
+                {{ message }}
+            </div>
         {% endif %}
-        <button><a href="{% url 'event_feedback' request.user.id %}">Info Feedback</a> </button>
-        <button><a href="{% url 'home' %}">Home</a></button>
-        <button><a href="{% url 'database_home' %}">Database</a></button>
-        {{ message }}
-        <h1>user type: {{ user_type }}</h1>
-    {% else %}
-        <button><a href="{% url 'login' %}">Login</a></button>
-        <button><a href="{% url 'register' %}">Register</a></button>
-    {% endif %}
-
-</body>
-</html>
+    </div>
+    <main class="main-content">
+        {% for event in events %}
+            <div class="card pb-0">
+                <div class="card-content">
+                    <h2 class="card-title">{{ event.event_name }}</h2>
+                    <p class="card-description">{{ event.event_description }}</p>
+                    <div class="penyelenggara">
+                        <p>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bxi bi-send" viewBox="0 0 16 16">
+                            <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z"/>
+                          </svg> {{ event.event_maker }}
+                        </p>
+                        <p>Untuk: <span class="untuk">{{ event.event_target }}</span></p>
+                    </div>
+                        <div class="details">
+                            <div class="location">{{ event.event_location }}</div>
+                            <div class="jam">{{ event.event_time }}</div>
+                            <div class="date">{{ event.event_date }}</div>
+                        </div>
+                </div>
+            </div>
+        {% endfor %}
+    </main>
+{% endblock %}
