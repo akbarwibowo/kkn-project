@@ -1,52 +1,67 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Data Feedback</title>
-</head>
-<body>
-    <h1>Data Feedback</h1>
-    {{ message }}
-    {% for batch in batches %}
-        <h4>Input in: {{ batch.date }}</h4>
-        <h5>Status: {{ batch.status }}</h5>
-        {% if batch.status == "revision" %}
-            <h5>Revision message: {{ batch.revision_message }}</h5>
-        {% endif %}
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Name</th>
-                    <th>Gender</th>
-                    <th>Birthdate</th>
-                    <th>Pregnant</th>
-                    <th>Work</th>
-                    <th>RT</th>
-                    <th>RW</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for data in batch.batch_data %}
-                    <tr>
-                        <td>{{ forloop.counter }}</td>
-                        <td>{{ data.name }}</td>
-                        <td>{{ data.gender }}</td>
-                        <td>{{ data.birth_date }}</td>
-                        <td>{{ data.pregnant }}</td>
-                        <td>{{ data.work }}</td>
-                        <td>{{ data.rt }}</td>
-                        <td>{{ data.rw }}</td>
-                {% endfor %}
-            </tbody>
-        </table>
+{% extends 'master/master_navbar.html' %}
+{% block title %}Umpan Balik Data Penduduk{% endblock %}
+{% block page_title %}Umpan Balik Data Penduduk{% endblock %}
 
-        {% if batch.status == 'revision' %}
-            <button><a href="{% url 'database_revision_form' batch.id %}">Revise</a></button>
-            {% else %}
-            <button><a href="{% url 'database_revision_form' batch.id %}">Edit</a></button>
-        {% endif %}
-    {% endfor %}
-    <button><a href="{% url 'database_home' %}">Data Page</a></button>
-</body>
-</html>
+{% block content %}
+    <div class="container">
+        <div class="row justify-content-center">
+            {% if message %}
+                <div class="alert alert-danger text-center" role="alert">
+                    {{ message }}
+                </div>
+            {% endif %}
+        </div>
+
+        {% for batch in batches %}
+            <div class="card">
+                <div class="card-header">
+                    <h4>Input in: {{ batch.date }}</h4>
+                    <h5>Status: {{ batch.status }}</h5>
+                    {% if batch.status == "revision" %}
+                        <h5>Revision message: {{ batch.revision_message }}</h5>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Nama</th>
+                                    <th>Jenis Kelamin</th>
+                                    <th>Tanggal Lahir</th>
+                                    <th>Hamil</th>
+                                    <th>Pekerjaan</th>
+                                    <th>RT</th>
+                                    <th>RW</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for data in batch.batch_data %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ data.name }}</td>
+                                        <td>{{ data.gender }}</td>
+                                        <td>{{ data.birth_date }}</td>
+                                        <td>{% if data.pregnant is True %}Hamil{% else %}Tidak Hamil{% endif %}</td>
+                                        <td>{{ data.work }}</td>
+                                        <td>{{ data.rt }}</td>
+                                        <td>{{ data.rw }}</td>
+                                        <td>
+                                            <button class="btn btn-danger"><a class="nav-link" href="{% url 'database_delete' data.id %}">Hapus</a></button>
+                                        </td>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% if batch.status == 'revision' %}
+                    <button class="btn btn-warning"><a class="nav-link" href="{% url 'database_revision_form' batch.id %}">Revise</a></button>
+                    {% else %}
+                    <button class="btn btn-warning"><a class="nav-link" href="{% url 'database_revision_form' batch.id %}">Edit</a></button>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

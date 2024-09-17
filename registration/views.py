@@ -28,8 +28,10 @@ def register(request):
             user_choices = UserExtend.user_type_choices
             if user_type == 'resident':
                 user_type = user_choices['user']
-            elif user_type == ('rt' or 'rw'):
+            elif user_type == 'rt':
                 user_type = user_choices['special_user']
+            elif user_type == 'rw':
+                user_type = user_choices['special_user_rw']
 
             user = User.objects.create_user(username=username, password=password, email=email)
             user_extend = UserExtend(
@@ -59,7 +61,7 @@ def log_in(request):
 
     if request.method == 'POST':
         try:
-            username = request.POST.get('username')
+            username = str(request.POST.get('username')).lower()
             password = request.POST.get('password')
 
             # Check if the user exists

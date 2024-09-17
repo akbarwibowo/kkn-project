@@ -15,14 +15,14 @@ class Batch(models.Model):
 
 class Resident(models.Model):
     gender_choice = {
-        'male': 'male',
-        'female': 'female'
+        'laki-laki': 'laki-laki',
+        'perempuan': 'perempuan'
     }
     name = models.CharField(max_length=100)
-    gender = models.CharField(max_length=6, choices=gender_choice)
+    gender = models.CharField(max_length=10, choices=gender_choice)
     pregnant = models.BooleanField(default=False)
     birth_date = models.DateField()
-    work = models.CharField(max_length=10, default='unemployed')
+    work = models.CharField(max_length=15, default='tidak bekerja')
     rt = models.SmallIntegerField()
     rw = models.SmallIntegerField()
     batch = models.ForeignKey(Batch, on_delete=models.CASCADE)

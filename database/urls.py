@@ -11,4 +11,5 @@ urlpatterns = [
     path('database_feedback/', views.database_feedback, name='database_feedback'),
     path('database_revision_form/<int:batch_id>/', views.database_revision_form, name='database_revision_form'),
     path('database_revision_do/<int:batch_id>/', views.database_revision_do, name='database_revise_data'),
+    path('database_delete/<int:resident_id>/', views.delete_data, name='database_delete'),
 ]

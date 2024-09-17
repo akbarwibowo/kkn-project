@@ -5,9 +5,18 @@
     font-family: 'Poppins', sans-serif;
 }
 
-body {
+body, html {
     background-color: #F1F1F1;
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
 }
+
+.content-wrapper { /* Add a wrapper for your main content */
+    flex-grow: 1; /* Allow content to push the footer down */
+}
+
 
 .header {
     background-color: #F1F1F1;
@@ -185,6 +194,13 @@ body {
     color: inherit;
 }
 
+footer {
+  /* ... your existing footer styles ... */
+  position: relative; /* Position the footer */
+  bottom: 0; /* Position it at the bottom of the page */
+  width: 100%; /* Full width */
+}
+
 
 /* Media Queries untuk Responsivitas */
 @media (min-width: 450px) {
@@ -219,7 +235,7 @@ body {
         --bs-offcanvas-width: 25%; /* Sesuaikan lebar sesuai kebutuhan */
     }
     .title {
-        font-size: 35px;
+        font-size: 20px;
     }
 
 }

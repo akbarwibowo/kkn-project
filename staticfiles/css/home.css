@@ -1,54 +1,64 @@
-/* Custom Card Styling */
-.custom-card {
-    border-radius: 15px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    border: none;
-    position: relative; /* Ensure relative positioning for absolute children */
-}
-
-.custom-card img {
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-}
-
-.custom-card .card-body {
-    padding: 1.5rem;
-}
-
-.custom-card .card-footer {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    border-top: none;
-    background-color: transparent;
-    padding: 1rem 1.5rem;
-}
-
-.custom-card .avatar {
-    display: flex;
-    align-items: center;
-}
-
-.custom-card .avatar img {
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    margin-right: 0.5rem;
-}
-
-/* Positioning the date badge at the bottom-right of the card */
-.custom-card .date-badge {
-    position: absolute;
-    bottom: 1rem;
-    right: 1rem;
-    background-color: #00bfa5;
-    color: #fff;
-    font-weight: bold;
-    padding: 0.5rem 1rem;
+.card {
+    padding-top: 1rem;
+    padding-right: 1rem;
+    padding-left: 1rem;
+    background-color: #ffffff;
     border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    width: 80%;
+    box-shadow: 0px 5px 10px -5px rgba(0, 0, 0, 0.5); /*x, y, blur, spread radius*/
+}
+
+.card-image {
+    border-radius: 10px;
+    width: 20px;
+    height: 20px;
+    display: block;
+    /* box-shadow: 0px 10px 10px 0px rgba(0, 0, 0, 0.5); x, y, blur, spread radius, */
+}
+
+.card-content {
+    padding-top: 15px;
+    color: rgb(0, 0, 0);
+}
+
+.card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 3px;
+}
+
+.card-description {
+    font-size: 16px;
+}
+
+.keterangan {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.info-penulis {
+    display: flex;
+    align-items: center;
+}
+
+.profile-icon {
+    margin-right: 2px;
+}
+
+.penulis {
     font-size: 1rem;
 }
+
+.tanggal {
+    color: #ffffff;
+    font-weight: 600;
+    width: 30%;
+    background-color: #00A69B;
+    text-align: center;
+    border-radius: 10px 10px 0 0;
+    line-height: 20px;
+}
+

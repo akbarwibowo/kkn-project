@@ -58,13 +58,18 @@
                             </div>
                             <div class="main-menu p-0" id="database">
                                 <div class="nt" onclick="toggleSubMenuDatabase('submenuDatabase')">
-                                    <div class="navbar-tambah">Database</div>
+                                    <div class="navbar-tambah">Data Penduduk</div>
                                     <div class="icon">&#9660;</div>
                                 </div>
                                 <div id="submenuDatabase" class="submenuDatabaseClass p-0" style="display: none;">
-                                    <div class="submenuDatabase-Database" onclick="window.location.href='database.html';">Database</div>
-                                    <div class="submenuDatabase-Tambah" onclick="window.location.href='tambah-database.html';">Tambah Database</div>
-                                    <div class="submenuDatabase-hapus" onclick="window.location.href='hapus-database.html';">Hapus Database</div>
+                                    <div class="submenuDatabase-Database" onclick="window.location.href='{% url 'database_home' %}';">Data Penduduk Desa</div>
+                                    {% if request.user.userextend.user_type == 'special_user' %}
+                                        <div class="submenuDatabase-Tambah" onclick="window.location.href='{% url 'database_form' %}';">Tambah Data Penduduk</div>
+                                        <div class="submenuDatabase-hapus" onclick="window.location.href='{% url "database_feedback" %}';">Status Data Dikirimkan</div>
+
+                                        {% elif request.user.userextend.user_type == 'super_user' or 'super_user_rw' %}
+                                        <div class="submenuDatabase-hapus" onclick="window.location.href='{% url "database_approval_page" %}';">Setujui Data Dikirimkan</div>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -107,8 +112,20 @@
 
         </nav>
     </header>
-    {% block content %}
-    {% endblock %}
+    <div class="content-wrapper">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <footer class="text-center">
+    <div class="footer">
+        <div class="footer-content">
+            <div class="footer-text">
+                <p>© 2024 Kelompok KKN UNY Padukuhan Sidokerto</p>
+            </div>
+        </div>
+    </div>
+    </footer>
     <script src="{% static 'js/navbar.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

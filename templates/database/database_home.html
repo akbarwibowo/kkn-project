@@ -1,45 +1,149 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Data Desa</title>
-</head>
-<body>
-    {{ message }}
-    <table>
-        <thead>
-            <tr>
-                <th>No</th>
-                <th>Name</th>
-                <th>Gender</th>
-                <th>Age</th>
-                <th>Pregnant</th>
-                <th>Work</th>
-                <th>RT</th>
-                <th>RW</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for data in database %}
-            <tr>
-                <td>{{ forloop.counter }}</td>
-                <td>{{ data.name }}</td>
-                <td>{{ data.gender }}</td>
-                <td>{{ data.age }}</td>
-                <td>{{ data.pregnant }}</td>
-                <td>{{ data.work }}</td>
-                <td>{{ data.rt }}</td>
-                <td>{{ data.rw }}</td>
+{% extends 'master/master_navbar.html' %}
+{% block title %}Data Penduduk Desa{% endblock %}
+{% block page_title %}Data Penduduk Padukuhan Sidokerto{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        {% if message %}
+            <div class="alert alert-danger text-center" role="alert">
+                {{ message }}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="filters">
+        <div class="filter-group">
+            <label for="filter-rt">Filter by RT:</label>
+            <select id="filter-rt">
+                <option value="">Semua</option>
+                {% for rt in unique_rt %}
+                    <option value="{{ rt }}">RT {{ rt }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="filter-rw">Filter by RW:</label>
+            <select id="filter-rw">
+                <option value="">Semua</option>
+                {% for rw in unique_rw %}
+                    <option value="{{ rw }}">RW {{ rw }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    {% if database %}
+        <div class="counts-container mt-4">
+            <h3>Data Demografi:</h3>
+            <ul>
+                <li>Jumlah Anak (di bawah 5 tahun): {{ child_count }}</li>
+                {% for rw, rt_counts in rw_rt_child_count.items %}
+                    <h4>RW {{ rw }}</h4>
+                    <ul>
+                        {% for rt, count in rt_counts.items %}
+                            <li>RT {{ rt }}: {{ count }} anak</li>
+                        {% endfor %}
+                    </ul>
+                {% endfor %}
+                <li>Jumlah Lansia (di atas 60 tahun): {{ elderly_count }}</li>
+                {% for rw, rt_counts in rw_rt_elderly_count.items %}
+                    <h4>RW {{ rw }}</h4>
+                    <ul>
+                    {% for rt, count in rt_counts.items %}
+                        <li>RT {{ rt }}: {{ count }} lansia</li>
+                    {% endfor %}
+                    </ul>
+                {% endfor %}
+                <li>Jumlah Ibu Hamil: {{ pregnant_count }}</li>
+                {% for rw, rt_counts in rw_rt_pregnant_count.items %}
+                    <h4>RW {{ rw }}</h4>
+                    <ul>
+                    {% for rt, count in rt_counts.items %}
+                        <li>RT {{ rt }}: {{ count }} ibu hamil</li>
+                    {% endfor %}
+                    </ul>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="table-container">
+            {% regroup database by rw as residents_by_rw %}
+            {% for rw_group in residents_by_rw %}
+                <table class="table" data-rw="{{ rw_group.grouper }}">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama</th>
+                            <th>Jenis Kelamin</th>
+                            <th>Umur</th>
+                            <th>Hamil</th>
+                            <th>Pekerjaan</th>
+                            <th>RT</th>
+                            <th>RW</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% regroup rw_group.list by rt as residents_by_rt %}
+                        {% for rt_group in residents_by_rt %}
+                            {% for resident in rt_group.list %}
+                                <tr data-rt="{{ resident.rt }}">
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ resident.name }}</td>
+                                    <td>{{ resident.gender }}</td>
+                                    <td>{{ resident.age }}</td>
+                                    <td>{{ resident.pregnant }}</td>
+                                    <td>{{ resident.work }}</td>
+                                    <td>{{ resident.rt }}</td>
+                                    <td>{{ resident.rw }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% endfor %}
+                    </tbody>
+                </table>
             {% endfor %}
-        </tbody>
-    </table>
-    {% if user_type == "special_user" %}
-        <button><a href="{% url 'database_form' %}">Add Data</a></button>
-        <button><a href="{% url 'database_feedback' %}">Data Feedback</a></button>
+        </div>
+    {% else %}
+        <div class="no-data-message mt-4">
+            <p>Belum ada data penduduk yang tersedia.</p>
+        </div>
     {% endif %}
-    {% if user_type == "super_user" %}
-        <button><a href="{% url 'database_approval_page' %}">Data Approval</a></button>
-    {% endif %}
-    <button><a href="{% url 'event_page' request.user.id %}">Event Page</a></button>
-</body>
-</html>
+</div>
+
+<script>
+    const filterRT = document.getElementById('filter-rt');
+    const filterRW = document.getElementById('filter-rw');
+    const tables = document.querySelectorAll('.table');
+
+    filterRT.addEventListener('change', applyFilters);
+    filterRW.addEventListener('change', applyFilters);
+
+    function applyFilters() {
+        const selectedRT = filterRT.value;
+        const selectedRW = filterRW.value;
+
+        tables.forEach(table => {
+            const tableRW = table.getAttribute('data-rw');
+            const rows = table.querySelectorAll('tbody tr');
+
+            if (selectedRW === '' || tableRW === selectedRW) {
+                table.style.display = 'table';
+                rows.forEach(row => {
+                    const rowRT = row.getAttribute('data-rt');
+                    if (selectedRT === '' || rowRT === selectedRT) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            } else {
+                table.style.display = 'none';
+            }
+        });
+    }
+
+    // Apply filters on page load to handle any pre-selected values
+    applyFilters();
+</script>
+{% endblock %}

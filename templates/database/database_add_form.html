@@ -1,50 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic Form</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .form-container {
-            border: 1px solid #ccc;
-            padding: 15px;
-            margin-bottom: 15px;
-        }
-        .form-group {
-            margin-bottom: 10px;
-        }
-        label {
-            display: inline-block;
-            width: 100px;
-        }
-        input, select {
-            width: 200px;
-        }
-        button {
-            margin-top: 10px;
-        }
-    </style>
-</head>
-<body>
-    <h1>Dynamic Form</h1>
-    <form id="mainForm" method="POST">
-        {% csrf_token %}
-        <div id="formsContainer"></div>
-        <button type="button" onclick="addForm()">Add New Form</button>
-        <button type="submit">Submit All Forms</button>
-    </form>
+{% extends 'master/master_navbar.html' %}
+{% load static %}
+{% block title %}Tambah Data Penduduk{% endblock %}
+{#{% block style_sheet %}{% static 'css/database_form.css' %}{% endblock %}#}
+{% block page_title %}Tambah Data Penduduk{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <form class="form m3-3" id="mainForm" method="POST">
+            {% csrf_token %}
+            <div class="form-container" id="formsContainer"></div>
+            <button class="btn btn-primary mt-3" type="button" onclick="addForm()">Tambah Formulir</button>
+            <button class="btn btn-success mt-3" type="submit" id="submitButton">Kirim Data</button>
+        </form>
+    </div>
 
     <script>
         let formCount = 0;
+        let formIds = [];
 
         function addForm() {
             formCount++;
+            formIds.push(formCount);
             const formContainer = document.createElement('div');
             formContainer.className = 'form-container';
             formContainer.id = `form-${formCount}`;
@@ -52,44 +28,44 @@
             formContainer.innerHTML = `
                 <h2>Form ${formCount}</h2>
                 <div class="form-group">
-                    <label for="name-${formCount}">Name:</label>
-                    <input type="text" id="name-${formCount}" name="name-${formCount}" required>
+                    <label class="form-label" for="name-${formCount}">Nama:</label>
+                    <input class="form-control" type="text" id="name-${formCount}" name="name-${formCount}" required>
                 </div>
                 <div class="form-group">
-                    <label for="gender-${formCount}">Gender:</label>
-                    <select id="gender-${formCount}" name="gender-${formCount}" required onchange="togglePregnantField(${formCount})">
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
+                    <label class="form-label" for="gender-${formCount}">Jenis Kelamin:</label>
+                    <select class="form-select" id="gender-${formCount}" name="gender-${formCount}" required onchange="togglePregnantField(${formCount})">
+                        <option value="laki-laki">Laki-laki</option>
+                        <option value="perempuan">Perempuan</option>
                     </select>
                 </div>
                 <div class="form-group" id="pregnant-group-${formCount}" style="display: none;">
-                    <label for="pregnant-${formCount}">Pregnant:</label>
-                    <select id="pregnant-${formCount}" name="pregnant-${formCount}">
-                        <option value="false">False</option>
-                        <option value="true">True</option>
+                    <label class="form-label" for="pregnant-${formCount}">Sedang Hamil:</label>
+                    <select class="form-select" id="pregnant-${formCount}" name="pregnant-${formCount}">
+                        <option value="false">Tidak</option>
+                        <option value="true">Iya</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="birthdate-${formCount}">Birth Date:</label>
-                    <input type="date" id="birthdate-${formCount}" name="birthdate-${formCount}" required>
+                    <label class="form-label" for="birthdate-${formCount}">Tanggal Lahir:</label>
+                    <input class="form-control" type="date" id="birthdate-${formCount}" name="birthdate-${formCount}" required>
                 </div>
                 <div class="form-group">
-                    <label for="work-${formCount}">Work:</label>
-                    <select id="work-${formCount}" name="work-${formCount}">
-                        <option value="student">Student</option>
-                        <option value="employee">Employee</option>
-                        <option value="unemployed">Unemployed</option>
+                    <label class="form-label" for="work-${formCount}">Status Pekerjaan:</label>
+                    <select class="form-select" id="work-${formCount}" name="work-${formCount}">
+                        <option value="siswa/mahasiswa">Siswa/Mahasiswa</option>
+                        <option value="bekerja">Bekerja</option>
+                        <option value="tidak bekerja">Tidak Bekerja</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="rt-${formCount}">RT:</label>
-                    <input type="number" id="rt-${formCount}" name="rt-${formCount}" required>
+                    <label class="form-label" for="rt-${formCount}">RT:</label>
+                    <input class="form-control" type="number" id="rt-${formCount}" name="rt-${formCount}" readonly value="{{ rt }}">
                 </div>
                 <div class="form-group">
-                    <label for="rw-${formCount}">RW:</label>
-                    <input type="number" id="rw-${formCount}" name="rw-${formCount}" required>
+                    <label class="form-label" for="rw-${formCount}">RW:</label>
+                    <input class="form-control" type="number" id="rw-${formCount}" name="rw-${formCount}" readonly value={{ rw }}>
                 </div>
-                ${formCount > 1 ? `<button type="button" onclick="deleteForm(${formCount})">Delete Form</button>` : ''}
+                <button class="btn btn-danger mt-3" type="button" onclick="deleteForm(${formCount})">Hapus Formulir</button>
             `;
 
             document.getElementById('formsContainer').appendChild(formContainer);
@@ -97,18 +73,26 @@
 
         function deleteForm(formId) {
             const formToDelete = document.getElementById(`form-${formId}`);
-            formToDelete.remove();
+            if (formToDelete) {
+                formToDelete.remove();
+                formIds = formIds.filter(id => id !== formId);
+            }
         }
 
         function togglePregnantField(formId) {
             const genderSelect = document.getElementById(`gender-${formId}`);
             const pregnantGroup = document.getElementById(`pregnant-group-${formId}`);
-            
-            if (genderSelect.value === 'female') {
-                pregnantGroup.style.display = 'block';
-            } else {
-                pregnantGroup.style.display = 'none';
-                document.getElementById(`pregnant-${formId}`).value = 'false';
+
+            if (genderSelect && pregnantGroup) {
+                if (genderSelect.value === 'perempuan') {
+                    pregnantGroup.style.display = 'block';
+                } else {
+                    pregnantGroup.style.display = 'none';
+                    const pregnantSelect = document.getElementById(`pregnant-${formId}`);
+                    if (pregnantSelect) {
+                        pregnantSelect.value = 'false';
+                    }
+                }
             }
         }
 
@@ -116,17 +100,18 @@
             e.preventDefault();
             const formList = [];
 
-            for (let i = 1; i <= formCount; i++) {
-                if (document.getElementById(`form-${i}`)) {
+            for (const formId of formIds) {
+                const formElement = document.getElementById(`form-${formId}`);
+                if (formElement) {
                     const formEntry = {
-                        name: document.getElementById(`name-${i}`).value,
-                        gender: document.getElementById(`gender-${i}`).value,
-                        birthdate: document.getElementById(`birthdate-${i}`).value,
-                        rt: document.getElementById(`rt-${i}`).value,
-                        rw: document.getElementById(`rw-${i}`).value,
-                        work: document.getElementById(`work-${i}`).value,
-                        pregnant: document.getElementById(`gender-${i}`).value === 'female' 
-                            ? document.getElementById(`pregnant-${i}`).value 
+                        name: document.getElementById(`name-${formId}`).value,
+                        gender: document.getElementById(`gender-${formId}`).value,
+                        birthdate: document.getElementById(`birthdate-${formId}`).value,
+                        rt: document.getElementById(`rt-${formId}`).value,
+                        rw: document.getElementById(`rw-${formId}`).value,
+                        work: document.getElementById(`work-${formId}`).value,
+                        pregnant: document.getElementById(`gender-${formId}`).value === 'perempuan'
+                            ? document.getElementById(`pregnant-${formId}`).value
                             : 'false'
                     };
                     formList.push(formEntry);
@@ -143,11 +128,28 @@
                 },
                 body: JSON.stringify(formList),
             })
-                .then(() => window.location.href = '{% url "database_home" %}');
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('Success:', data.message);
+                    window.location.href = data.redirect;
+                } else {
+                    console.error('Error:', data.error);
+                    alert('An error occurred: ' + data.error);
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('An error occurred while submitting the form. Please try again.');
+            });
         });
 
         // Add the first form when the page loads
         addForm();
+
+        // Ensure the submit button is clickable
+        document.getElementById('submitButton').addEventListener('click', function(e) {
+            console.log('Submit button clicked');
+        });
     </script>
-</body>
-</html>
+{% endblock %}

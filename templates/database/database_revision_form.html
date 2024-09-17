@@ -1,43 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic Form</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .form-container {
-            border: 1px solid #ccc;
-            padding: 15px;
-            margin-bottom: 15px;
-        }
-        .form-group {
-            margin-bottom: 10px;
-        }
-        label {
-            display: inline-block;
-            width: 100px;
-        }
-        input, select {
-            width: 200px;
-        }
-        button {
-            margin-top: 10px;
-        }
-    </style>
-</head>
-<body>
-    <h1>Dynamic Form</h1>
-    <form id="mainForm" method="POST">
+{% extends 'master/master_navbar.html' %}
+{% load static %}
+{% block title %}Edit Data{% endblock %}
+{% block style_sheet %}{% static 'css/database_form.css' %}{% endblock %}
+{% block page_title %}Edit Data{% endblock %}
+
+{% block content %}
+    <form id="mainForm" method="POST" class="form">
         {% csrf_token %}
         <div id="formsContainer"></div>
-{#        <button type="button" onclick="addForm()">Add New Form</button>#}
-        <button type="submit">Submit All Forms</button>
+        <button class="btn btn-success" type="submit">Kirim Data</button>
     </form>
 
     <script>
@@ -53,42 +24,42 @@
             formContainer.innerHTML = `
                 <h2>Form ${formCount}</h2>
                 <div class="form-group">
-                    <label for="name-${formCount}">Name:</label>
-                    <input type="text" id="name-${formCount}" name="name-${formCount}" required>
+                    <label class="form-label" for="name-${formCount}">Nama:</label>
+                    <input class="form-control" type="text" id="name-${formCount}" name="name-${formCount}" required>
                 </div>
                 <div class="form-group">
-                    <label for="gender-${formCount}">Gender:</label>
-                    <select id="gender-${formCount}" name="gender-${formCount}" required onchange="togglePregnantField(${formCount})">
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
+                    <label class="form-label" for="gender-${formCount}">Jenis Kelamin:</label>
+                    <select class="form-select" id="gender-${formCount}" name="gender-${formCount}" required onchange="togglePregnantField(${formCount})">
+                        <option value="laki-laki">Laki-laki</option>
+                        <option value="perempuan">Perempuan</option>
                     </select>
                 </div>
                 <div class="form-group" id="pregnant-group-${formCount}" style="display: none;">
-                    <label for="pregnant-${formCount}">Pregnant:</label>
-                    <select id="pregnant-${formCount}" name="pregnant-${formCount}">
-                        <option value="false">False</option>
-                        <option value="true">True</option>
+                    <label class="form-label" for="pregnant-${formCount}">Sedang Hamil:</label>
+                    <select class="form-select" id="pregnant-${formCount}" name="pregnant-${formCount}">
+                        <option value="false">Tidak</option>
+                        <option value="true">Iya</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="birthdate-${formCount}">Birth Date:</label>
-                    <input type="date" id="birthdate-${formCount}" name="birthdate-${formCount}" required>
+                    <label class="form-label" for="birthdate-${formCount}">Tanggal Lahir:</label>
+                    <input class="form-control" type="date" id="birthdate-${formCount}" name="birthdate-${formCount}" required>
                 </div>
                 <div class="form-group">
-                    <label for="rt-${formCount}">RT:</label>
-                    <input type="number" id="rt-${formCount}" name="rt-${formCount}" required>
-                </div>
-                <div class="form-group">
-                    <label for="rw-${formCount}">RW:</label>
-                    <input type="number" id="rw-${formCount}" name="rw-${formCount}" required>
-                </div>
-                <div class="form-group">
-                    <label for="work-${formCount}">Work:</label>
-                    <select id="work-${formCount}" name="work-${formCount}">
-                        <option value="student">Student</option>
-                        <option value="employee">Employee</option>
-                        <option value="unemployed">Unemployed</option>
+                    <label class="form-label" for="work-${formCount}">Status Pekerjaan:</label>
+                    <select class="form-select" id="work-${formCount}" name="work-${formCount}">
+                        <option value="siswa/mahasiswa">Siswa/Mahasiswa</option>
+                        <option value="bekerja">Bekerja</option>
+                        <option value="tidak bekerja">Tidak Bekerja</option>
                     </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="rt-${formCount}">RT:</label>
+                    <input class="form-control" type="number" id="rt-${formCount}" name="rt-${formCount}" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="rw-${formCount}">RW:</label>
+                    <input class="form-control" type="number" id="rw-${formCount}" name="rw-${formCount}" required>
                 </div>
                 ${formCount > 1 ? `{#<button type="button" onclick="deleteForm(${formCount})">Delete Form</button>#}` : ''}
             `;
@@ -103,22 +74,17 @@
                 document.getElementById(`rw-${formCount}`).value = data.rw;
                 document.getElementById(`work-${formCount}`).value = data.work;
                 togglePregnantField(formCount);
-                if (data.gender === 'female') {
+                if (data.gender === 'perempuan') {
                     document.getElementById(`pregnant-${formCount}`).value = data.pregnant.toString();
                 }
             }
-        }
-
-        function deleteForm(formId) {
-            const formToDelete = document.getElementById(`form-${formId}`);
-            formToDelete.remove();
         }
 
         function togglePregnantField(formId) {
             const genderSelect = document.getElementById(`gender-${formId}`);
             const pregnantGroup = document.getElementById(`pregnant-group-${formId}`);
 
-            if (genderSelect.value === 'female') {
+            if (genderSelect.value === 'perempuan') {
                 pregnantGroup.style.display = 'block';
             } else {
                 pregnantGroup.style.display = 'none';
@@ -138,7 +104,7 @@
                         birthdate: document.getElementById(`birthdate-${i}`).value,
                         rt: document.getElementById(`rt-${i}`).value,
                         rw: document.getElementById(`rw-${i}`).value,
-                        pregnant: document.getElementById(`gender-${i}`).value === 'female'
+                        pregnant: document.getElementById(`gender-${i}`).value === 'perempuan'
                             ? document.getElementById(`pregnant-${i}`).value === 'true'
                             : false,
                         work: document.getElementById(`work-${i}`).value
@@ -167,5 +133,4 @@
             addForm();
         }
     </script>
-</body>
-</html>
+{% endblock %}

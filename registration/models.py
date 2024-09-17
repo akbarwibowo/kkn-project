@@ -8,6 +8,7 @@ class UserExtend(models.Model):
     user_type_choices = {
         "super_user": "super_user",
         "special_user": "special_user",
+        "special_user_rw": "special_user_rw",
         "user": "user",
         "visitor": "visitor"
     }
