@@ -216,13 +216,11 @@ def info_delete(request, info_id):
 
 
 def info_detail(request, info_id):
-    if request.user.is_authenticated:
-        try:
-            info = Information.objects.filter(id=info_id).values()[0]
-            info['info_image'] = base64.b64encode(info['info_image']).decode('utf-8')
-            info['maker'] = Information.objects.get(id=info['id']).user.user.username
+    try:
+        info = Information.objects.filter(id=info_id).values()[0]
+        info['info_image'] = base64.b64encode(info['info_image']).decode('utf-8')
+        info['maker'] = Information.objects.get(id=info['id']).user.user.username
 
-            return render(request, 'info_desa/info_detail.html', context={'info': info})
-        except Exception as e:
-            HttpResponseRedirect(reverse('home'))
-    return HttpResponseRedirect(reverse('home'))
+        return render(request, 'info_desa/info_detail.html', context={'info': info})
+    except Exception as e:
+        HttpResponseRedirect(reverse('home'))
