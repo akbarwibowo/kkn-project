@@ -66,8 +66,8 @@
                                     {% if request.user.userextend.user_type == 'special_user' %}
                                         <div class="submenuDatabase-Tambah" onclick="window.location.href='{% url 'database_form' %}';">Tambah Data Penduduk</div>
                                         <div class="submenuDatabase-hapus" onclick="window.location.href='{% url "database_feedback" %}';">Status Data Dikirimkan</div>
-
-                                        {% elif request.user.userextend.user_type == 'super_user' or 'super_user_rw' %}
+                                    {% endif %}
+                                    {% if request.user.userextend.user_type == 'super_user' or request.user.userextend.user_type == 'super_user_rw' %}
                                         <div class="submenuDatabase-hapus" onclick="window.location.href='{% url "database_approval_page" %}';">Setujui Data Dikirimkan</div>
                                     {% endif %}
                                 </div>
